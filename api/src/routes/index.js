@@ -1,14 +1,14 @@
 const { Router } = require('express');
-// Importar todos los routers;
-// Ejemplo: const authRouter = require('./auth.js');
+// Importar todos los routerrs;
+// Ejemplo: const authrouterr = require('./auth.js');
 const axios = require('axios');
 
 
 // aca defino models y me los traigo de la BD
-const { Game, Genre, Games_genres } = require('../db.js'); //importo los modelos conectados
+const { Game, Genre, Game_genre } = require('../db.js'); //importo los modelos conectados
 const {API_KEY} = process.env;
 
-const route = Router();
+const router = Router();
 
 // Configurar los routers
 // Ejemplo: router.use('/auth', authRouter);
@@ -28,7 +28,7 @@ const getApiInfo = async () => {
         //released:released, //Fecha de lanzamiento
         //rating: p.rating,
         platform:p.platforms,
-        //genre:p.genres,
+        genres:p.genres,
         image:p.background_image,
     }
     })
@@ -56,7 +56,7 @@ const getAllGames = async () => {
 };
 // [ ] GET /videogames:
 // Obtener un listado de los videojuegos, Debe devolver solo los datos necesarios para la ruta principal
-route.get('/games', async (req, res) => {
+router.get('/games', async (req, res) => {
     const name = req.query.name;
     const gamesAll = await getAllGames();
     if (name) {
@@ -71,25 +71,25 @@ route.get('/games', async (req, res) => {
     }
 });
 
-router.get('/genres', async (req, res) => {
-    const apiHtml = await axios ('https://api.rawg.io/api/games?key=568655144cbd472f91f71519a75eac0e')
-    const genres = apiHtml.data.map(p => p.genre)
-    const splitgenre = await genres.filter(p => p.length > 0);
+// router.get('/genres', async (req, res, next) => {
+//     let apiHtml = await axios ('https://api.rawg.io/api/games?key=568655144cbd472f91f71519a75eac0e')})
+//     const genres = apiHtml.results.genres.map((p) => p.genres)
+//     const splitgenre = genres.findAll((p) => p.length > 0);
 
-    //console.log (splitgenre) //compruebo lo q trae
-    splitgenre.forEach(p => {
-        console.log (p)
-        // me traigo los temperamentos de la base de datos busca o lo crea si no existe
-        if (p !== undefined) Genre.findOrCreate({ where: { name: p } })
-            const allgenre = await Genre.findAll();
-            res.send(allGenre);
-});
+//     //console.log (splitgenre) //compruebo lo q trae
+//     splitgenre.forEach(p => {
+//         console.log (p)
+//         // me traigo los temperamentos de la base de datos busca o lo crea si no existe
+//         if (p !== undefined) Genre.findOrCreate({ where: { name: p } })
+//         const allGenre = await (genres.findAll());
+//         res.send(allGenre);
+// });
 
-router.get('/games?search={name}', async (req, res) => {});
+// router.get('/games?search={name}', async (req, res) => {});
 
-router.get('/games/:id', async (req, res) => {});
+// router.get('/games/:id', async (req, res) => {});
 
-router.post('/allGames', async (req, res) => {});
+// router.post('/allGames', async (req, res) => {});
 
 
-module.exports = route;
+module.exports = router;
