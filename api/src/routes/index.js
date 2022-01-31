@@ -5,7 +5,7 @@ const axios = require('axios');
 
 
 // aca defino models y me los traigo de la BD
-const { Game, Genre, Game_genre } = require('../db.js'); //importo los modelos conectados
+const { Games, Genres, Game_genre } = require('../db.js'); //importo los modelos conectados
 const {API_KEY} = process.env;
 
 const router = Router();
@@ -24,21 +24,21 @@ const getApiInfo = async () => {
     return { // ya la retorno con campos iguales a mi DB
         id: p.id,
         name:p.name,        
-        description:p.description,
-        //released:released, //Fecha de lanzamiento
-        //rating: p.rating,
+        description:p.description,        
         platform:p.platforms,
         genres:p.genres,
         image:p.background_image,
+        //released:released, //Fecha de lanzamiento
+        //rating: p.rating,
     }
     })
     return ApiInfo;
 };
 
 const getDbInfo = async () => {
-    return await Game.findAll({  //traigo la info de mi base de datos
+    return await Games.findAll({  //traigo la info de mi base de datos
         include: {  // ademas de todo traeme temperament 
-            model: Genre,
+            model: Genres,
             attributes: ['name'],
             through: { // va siempre en las llamadas y comprueba que llame atributo name en este caso 
                 attributes: [],
@@ -71,19 +71,27 @@ router.get('/games', async (req, res) => {
     }
 });
 
-// router.get('/genres', async (req, res, next) => {
-//     let apiHtml = await axios ('https://api.rawg.io/api/games?key=568655144cbd472f91f71519a75eac0e')})
-//     const genres = apiHtml.results.genres.map((p) => p.genres)
-//     const splitgenre = genres.findAll((p) => p.length > 0);
+router.get('/genres', async (req, res, next) => {    
+    const apiHtml = await getApiInfo();//await axios ('https://api.rawg.io/api/games?key=568655144cbd472f91f71519a75eac0e');    
+    const genresName = apiHtml.map(p => p.genres)    
+    //const genresName = genre.map(p => p.name) //asi recorro el objeto de Generos q es un array con objetos dentro
+    
+    const genresString = genresName.toString().trim().split(/\s*,\s*/);  
 
-//     //console.log (splitgenre) //compruebo lo q trae
-//     splitgenre.forEach(p => {
-//         console.log (p)
-//         // me traigo los temperamentos de la base de datos busca o lo crea si no existe
-//         if (p !== undefined) Genre.findOrCreate({ where: { name: p } })
-//         const allGenre = await (genres.findAll());
-//         res.send(allGenre);
-// });
+    //
+
+    const genresName1 = await genresString.filter(p => p.length > 0); // para verificar q no traiga nada vacio
+    
+    // console.log("GENRES DEL FILTER" + genresName);
+    //recorro todo buscando y me traigo los generos de la base de datos busca o lo crea si no existe
+    genresName1.forEach(p => { if (p!==undefined) Genres.findOrCreate({where:{name:p}})})  
+
+    const allGenres = await Genres.findAll();
+    //console.log ("ALL API GENRE"+ genre)
+    console.log ("ALL GENRES"+ allGenres)        
+    res.send(allGenres);
+    });
+    
 
 // router.get('/games?search={name}', async (req, res) => {});
 
