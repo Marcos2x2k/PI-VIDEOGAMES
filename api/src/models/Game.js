@@ -25,6 +25,11 @@ module.exports = (sequelize) => {
     platform:{
       type: DataTypes.STRING,
       allowNull:true,
+    },
+    createInDb: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: true
     }
   });
 };

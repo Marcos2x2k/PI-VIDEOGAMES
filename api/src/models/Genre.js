@@ -4,12 +4,12 @@ const { DataTypes } = require('sequelize');
 module.exports = (sequelize) => {
   // defino el modelo
   sequelize.define('Genres', {
-    id:{
-        type: DataTypes.UUID,
-        primaryKey: true,
-        defaultValue: DataTypes.UUIDV4,
-        allowNull: false,
-      },
+    // id:{
+    //     type: DataTypes.INTEGER,
+    //     primaryKey: true,
+    //     //defaultValue: DataTypes.UUIDV4,
+    //     allowNull: false,
+    //   },
     name: {
       type: DataTypes.STRING,
       allowNull: false,
