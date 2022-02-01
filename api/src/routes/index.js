@@ -22,7 +22,7 @@ const getApiInfo = async () => {
     //tengo que mapear si o si toda la info que me trae desde la Api
     const ApiInfo = apiHtml.data.results.map(p => {    
     return { // ya la retorno con campos iguales a mi DB
-        id: p.id,
+        id: p.id,//.map(p=>p),
         name:p.name,        
         description:p.description,        
         platform:p.platforms.map(p=>p),
@@ -85,15 +85,14 @@ router.get('/games', async (req, res) => {
 router.get('/genres', async (req, res) => {
     var apiHtml = await axios.get(`https://api.rawg.io/api/genres?key=${API_KEY}`)
     // ** para llamar por plataforma
-    //var apiHtml = await axios.get(`https://api.rawg.io/api/platforms/lists/parents?key=${API_KEY}`)
+    //var apiHtml = await axios.get(`https://api.rawg.io/api/platforms/lists/parents?key=${API_KEY2}`)
     
-    //API2 de PRUEBA 
-    //const url = await axios.get(`https://api.rawg.io/api/games?key=6d62af1479864f0cae7616fd7e10a7d2`)   
+    //API-2 de PRUEBA 
+    //const url = await axios.get(`https://api.rawg.io/api/games?key=${API_KEY2}`)   
     const genre = apiHtml.data.results.map(p => p.name)  
 
-    const genres = await genre.filter(p => p.length > 0); // para verificar q no traiga nada vacio
-    
-    // console.log("GENRES DEL FILTER" + genresName);
+    const genres = await genre.filter(p => p.length > 0); // para verificar q no traiga nada vacio    
+   
     //recorro todo buscando y me traigo los generos de la base de datos busca o lo crea si no existe
     genres.forEach(p => { if (p!==undefined) Genres.findOrCreate({where:{name:p}})})  
 
@@ -107,9 +106,46 @@ router.get('/genres', async (req, res) => {
 
 // router.get('/games?search={name}', async (req, res) => {});
 
-// router.get('/games/:id', async (req, res) => {});
+router.get("/games/:id", async (req, res) => {
+    const id = req.params.id;
+    const GamesTotal = await getAllGames();    
 
-// router.post('/allGames', async (req, res) => {});
+    console.log (GamesTotal)
+
+    if (id){
+        const gamesId = await GamesTotal.filter((p) => p.id == id)
+
+        // NOSE PORQUE ME TRAE CON OTROS ID DIFERENTES AL DE LA API
+        console.log(gamesId)
+        
+        gamesId.length ? res.status(200).send(gamesId) : res.status(404).send('NO EXISTE EL JUEGO BUSCADO')        
+    } 
+});
+
+router.post('/games', async (req, res) => {
+    let{       
+        name,        
+        description,        
+        platform,
+        genres,
+        image,
+        createInDb,
+    } = req.body // ** traigo lo q me pide por Body ** 
+
+    let GamesCreated = await Games.create({ 
+        name,        
+        description,        
+        platform,
+        genres,
+        image,
+        createInDb,})
+    
+        let genresDb = await Genres.findAll({
+            where: { name: genres }
+        })
+        GamesCreated.addGenres(genresDb)
+        res.send('Video Juego Creado')
+});
 
 
 module.exports = router;
