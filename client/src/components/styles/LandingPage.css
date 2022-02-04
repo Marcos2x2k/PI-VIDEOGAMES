@@ -1,0 +1,51 @@
+.logo{
+    border-radius:180px;
+    border:5px solid black;
+    width: 250px;
+    height: 250px;
+    animation-duration: 2s;
+    animation-name: logo;
+    /* animation-iteration-count: infinite; */
+}
+
+@keyframes logo{
+    50%{
+        width: 300px;
+        height: 300px;
+    }
+    50%{
+        width: 350px;
+        height: 350px;
+    }
+}
+
+.colorLetras{
+    color: black;
+    background-color: cyan;
+    border:5px solid black;
+    
+}
+
+.colorLetrasBienvenido{   
+    border-radius:30px;
+    border:5px solid black;
+    background-color: rgb(88, 85, 85);
+    color: white;
+    margin: 1rem;
+    /* padding: 1rem; */
+    /* text-align: center; */
+    width: 600px;
+    /* height: 350px; */
+}
+
+.padre {
+    display: grid;
+    justify-content: center;
+  }
+.hijo {
+    padding: 10px;
+    margin: 10px;
+    color: white;
+    text-shadow: black 1px 3px;
+        
+  }

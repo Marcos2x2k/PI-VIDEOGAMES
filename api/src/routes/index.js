@@ -14,14 +14,26 @@ const router = Router();
 // Ejemplo: router.use('/auth', authRouter);
 
 const getApiInfo = async () => {
-    // api en navegador https://api.rawg.io/api/games?key=568655144cbd472f91f71519a75eac0e
-    const apiHtml = await axios (`https://api.rawg.io/api/games?key=${API_KEY}`)
-    //const apiHtml = await axios.get('https://api.rawg.io/api/games?key=${API_KEY}')
+    try {
+        // API:
+        let gamesPage1 = axios.get(`https://api.rawg.io/api/games?key=${API_KEY}&page=1`);
+        let gamesPage2 = axios.get(`https://api.rawg.io/api/games?key=${API_KEY}&page=2`);
+        let gamesPage3 = axios.get(`https://api.rawg.io/api/games?key=${API_KEY}&page=3`);
+        let gamesPage4 = axios.get(`https://api.rawg.io/api/games?key=${API_KEY}&page=4`);
+        let gamesPage5 = axios.get(`https://api.rawg.io/api/games?key=${API_KEY}&page=5`);
 
-    //, {headers: {'x-api-key': `${API_KEY}`}});
-    //tengo que mapear si o si toda la info que me trae desde la Api
-    const ApiInfo = apiHtml.data.results.map(p => {    
-    return { // ya la retorno con campos iguales a mi DB
+        let promiseALL = await Promise.all([gamesPage1, gamesPage2, gamesPage3, gamesPage4, gamesPage5]);                                            
+
+        gamesPage1 = promiseALL[0].data.results;
+        gamesPage2 = promiseALL[1].data.results;
+        gamesPage3 = promiseALL[2].data.results;
+        gamesPage4 = promiseALL[3].data.results;
+        gamesPage5 = promiseALL[4].data.results;       
+
+        let apiHtml = gamesPage1.concat(gamesPage2).concat(gamesPage3).concat(gamesPage4).concat(gamesPage5);                  
+            
+        let ApiInfo = apiHtml.map(p => {
+        return { // ya la retorno con campos iguales a mi DB
         id: p.id,//.map(p=>p),
         name:p.name,        
         description:p.description,        
@@ -34,27 +46,55 @@ const getApiInfo = async () => {
     }    
     })
     return ApiInfo;
+    } catch (error) {
+    console.log(error);
+    }
 };
 
 const getDbInfo = async () => {
-    return await Games.findAll({  //traigo la info de mi base de datos
-        include: {  // ademas de todo traeme temperament 
-            model: Genres,
-            attributes: ['name'],
-            through: { // va siempre en las llamadas y comprueba que llame atributo name en este caso 
-                attributes: [],
+    try {
+        return await Games.findAll({
+            include: {
+                model: Genres,
+                attributes: ['name'],
+                through: {
+                    attributes:[],
+                },
             },
-        }
-    })
+        });
+
+    } catch (error) {
+        console.log(error);
+    }
+    // return await Games.findAll({  //traigo la info de mi base de datos
+    //     include: {  // ademas de todo traeme temperament 
+    //         model: Genres,
+    //         attributes: ['name'],
+    //         through: { // va siempre en las llamadas y comprueba que llame atributo name en este caso 
+    //             attributes: [],
+    //         },
+    //     }
+    // })
 };
 
 
 const getAllGames = async () => {
-    const apiInfo = await getApiInfo();
-    const dbInfo = await getDbInfo();
-    const infoTotal = apiInfo.concat(dbInfo);
-    return infoTotal;
-};
+    //const getAllVgames = async() => {
+        try {
+            const apiInfo = await getApiInfo();
+            const dbInfo = await getDbInfo();            
+            const infoTotal = apiInfo.concat(dbInfo);    
+            // console.log("Soy infoTotal >>> ", infoTotal);
+            return infoTotal;    
+        } catch (error) {
+            console.log(error);
+        }
+    };
+//     const apiInfo = await getApiInfo();
+//     const dbInfo = await getDbInfo();
+//     const infoTotal = apiInfo.concat(dbInfo);
+//     return infoTotal;
+// };
 
 // router.get('/', async (req, res) => {
 //     const name = req.query.name
@@ -97,9 +137,9 @@ router.get('/genres', async (req, res) => {
     genres.forEach(p => { if (p!==undefined) Genres.findOrCreate({where:{name:p}})})  
 
     const allGenres = await Genres.findAll();
-    console.log ("ALL API GENRE"+ genres)
+    // console.log ("ALL API GENRE"+ genres)
     //console.log ("GENRES NAME"+ genreName)        
-    console.log ("ALL GENRES"+ allGenres)        
+    // console.log ("ALL GENRES"+ allGenres)        
     res.send(allGenres);
     });
     
