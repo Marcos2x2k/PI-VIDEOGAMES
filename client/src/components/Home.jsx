@@ -14,6 +14,7 @@ import {Link} from 'react-router-dom';
 
 //ME IMPORTO EL COMPONENTE Card y renderizo en linea 
 import Card from './Card';
+import SearchBar from './SearchBar';
 
 //IMPORTAMOS EL PAGINADO
 import Paginado from './Paginado';
@@ -88,7 +89,7 @@ export default function Home (){
 // Aca renderizamos un Div
     return(
         
-        <div>        
+    <div>        
         <div>             
             <div className="padre">
                 <h1 className="colorLetrasBienvenido">** Bienvenidos a mi App de Juegos **</h1>
@@ -97,17 +98,20 @@ export default function Home (){
             <Button  variant="contained" color="primary" onClick={p => {handleClick(p)}}>
                 Volver a Cargar todos los Juegos
             </Button>  
-            <Button  variant="contained" color="secondary" href="/games/">
+            <Button  variant="contained" color="secondary" href="/newGames">
                     CREAR JUEGO NUEVO
             </Button> 
             <Button  variant="contained" color="primary" href="/">
             Ir a Pagina de Lanzamiento
-            </Button>            
-        </div>
+            </Button>                     
+        </div>            
             
             <br />
         
-        <div>
+        <div className="selectfont">
+        <SearchBar
+            />   
+            <br />
             <select className="selectfont" onChange={p => handleSort(p)}>
                 <option value="" selected disabled hidden>Orden alfabético</option>                
                 <option value='asc'>Ascendente</option>
@@ -133,22 +137,28 @@ export default function Home (){
                     allGames={allGames.length}
                     paginado = {paginado}                    
             />
-            {/* <SearchBar
-            /> */}
+            
                 {/* ACA NE TRAIGO LA CARD PARA RENDERIZAR con los datos que quiero */}
                 {currentGames?.map ((p) =>{  // CON ? PREGUNTA SI EXISTE Y DESPUES MAPEA
                     return(
-                    <Fragment>
+                    // <Fragment>
                     <div className="carddirection">    
-                            <Link to={"/home/" + p.id}>
+                            <Link 
+                                key={p.id}
+                                to={`/games/${p.id}`}
+                            >
                                 {/* //pase por props .name .image .genre  */}  
-                                <Card name={p.name} image={p.image} genres={p.genres}/>
+                            <Card 
+                                    name={p.name} 
+                                    image={p.image ? p.image : p.image} 
+                                    genre={p.genre}
+                            />
                             </Link>
                     </div>
-                    /</Fragment> 
+                    // /</Fragment> 
                     );
                 })}
             </div> 
-        </div>
+    </div>
         
     )}

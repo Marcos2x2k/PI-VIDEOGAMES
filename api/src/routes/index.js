@@ -1,14 +1,16 @@
-const { Router } = require('express');
+const express = require('express');
+const router = express.Router();
+// const router = Router();
+
 // Importar todos los routerrs;
 // Ejemplo: const authrouterr = require('./auth.js');
+//defino el middleware que me trae el body de las petisiones
+router.use(express.json())
 const axios = require('axios');
 
-
 // aca defino models y me los traigo de la BD
-const { Games, Genres, Game_genre } = require('../db.js'); //importo los modelos conectados
+const { Games, Genres} = require('../db.js'); //importo los modelos conectados
 const {API_KEY} = process.env;
-
-const router = Router();
 
 // Configurar los routers
 // Ejemplo: router.use('/auth', authRouter);
@@ -38,16 +40,17 @@ const getApiInfo = async () => {
         name:p.name,        
         description:p.description,        
         platform:p.platforms.map(p=>p),
-        genres:p.genres.map(p=>p),
+        // genre:p.genre,
+        genre:p.genres.map(p=>p),
         image:p.background_image,
         //released:released, //Fecha de lanzamiento
         //rating: p.rating,
-        //ratings: ar.ratings.map(a=>a),        
-    }    
-    })
-    return ApiInfo;
-    } catch (error) {
-    console.log(error);
+        //ratings: p.ratings.map(a=>a),        
+    }})
+        return ApiInfo;
+    } 
+    catch (error) 
+        {console.log(error);
     }
 };
 
@@ -108,14 +111,13 @@ const getAllGames = async () => {
 // [ ] GET /videogames:
 // Obtener un listado de los videojuegos, Debe devolver solo los datos necesarios para la ruta principal
 router.get('/games', async (req, res) => {
-    const name = req.query.name;
+    const name = req.query.name; //req query busca si hay un name por query
     const gamesAll = await getAllGames();
     if (name) {
         //tolowerCase hace que la busqueda en minus/mayusc no afecte al resultado
         const gamesName = await gamesAll.filter(p => p.name.toLowerCase().includes(name.toLowerCase()));
         gamesName.length? // preguntamos si hay algo
-            res.status(200).send(gamesName) 
-            :
+            res.status(200).send(gamesName) :
             res.status(404).send('NO EXISTE EL JUEGO BUSCADO');
     }else{
         res.status(200).send(gamesAll)
@@ -125,17 +127,15 @@ router.get('/games', async (req, res) => {
 router.get('/genres', async (req, res) => {
     var apiHtml = await axios.get(`https://api.rawg.io/api/genres?key=${API_KEY}`)
     // ** para llamar por plataforma
-    //var apiHtml = await axios.get(`https://api.rawg.io/api/platforms/lists/parents?key=${API_KEY2}`)
-    
-    //API-2 de PRUEBA 
-    //const url = await axios.get(`https://api.rawg.io/api/games?key=${API_KEY2}`)   
-    const genre = apiHtml.data.results.map(p => p.name)  
-
-    const genres = await genre.filter(p => p.length > 0); // para verificar q no traiga nada vacio    
+    //var apiHtml = await axios.get(`https://api.rawg.io/api/platforms/lists/parents?key=${API_KEY2}`)    
+   
+    const genres = apiHtml.data.results.map(p => p.name) 
+    const genre = await genres.filter(p => p.length > 0); // para verificar q no traiga nada vacio    
    
     //recorro todo buscando y me traigo los generos de la base de datos busca o lo crea si no existe
-    genres.forEach(p => { if (p!==undefined) Genres.findOrCreate({where:{name:p}})})  
-
+    genre.forEach(p => { 
+        if (p!==undefined) Genres.findOrCreate({where:{name:p}})
+    })  
     const allGenres = await Genres.findAll();
     // console.log ("ALL API GENRE"+ genres)
     //console.log ("GENRES NAME"+ genreName)        
@@ -149,41 +149,41 @@ router.get('/genres', async (req, res) => {
 router.get("/games/:id", async (req, res) => {
     const id = req.params.id;
     const GamesTotal = await getAllGames();    
-
-    console.log (GamesTotal)
-
+    //console.log (GamesTotal)
     if (id){
         const gamesId = await GamesTotal.filter((p) => p.id == id)
-
-        // NOSE PORQUE ME TRAE CON OTROS ID DIFERENTES AL DE LA API
-        console.log(gamesId)
-        
-        gamesId.length ? res.status(200).send(gamesId) : res.status(404).send('NO EXISTE EL JUEGO BUSCADO')        
+        // ME TRAE CON OTROS ID DIFERENTES AL DE LA API
+        console.log(gamesId)        
+        gamesId.length ? 
+                res.status(200).send(gamesId) : 
+                res.status(404).send('NO EXISTE EL JUEGO BUSCADO')        
     } 
 });
 
-router.post('/games', async (req, res) => {
+router.post('/newGames', async (req, res) => {
+    /// ** traigo lo q me pide por Body ** 
     let{       
         name,        
         description,        
         platform,
-        genres,
+        genre,
         image,
         createInDb,
-    } = req.body // ** traigo lo q me pide por Body ** 
+    } = req.body
 
-    let GamesCreated = await Games.create({ 
+    let gamesCreated = await Games.create({ 
         name,        
         description,        
         platform,
-        genres,
+        genre,
         image,
-        createInDb,})
+        createInDb,
+        })
     
         let genresDb = await Genres.findAll({
-            where: { name: genres }
+            where: { name: genre }
         })
-        GamesCreated.addGenres(genresDb)
+        gamesCreated.addGenres(genresDb)
         res.send('Video Juego Creado')
 });
 

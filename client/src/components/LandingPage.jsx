@@ -20,7 +20,8 @@ export default function LandingPage(){
                 {/* Boton lindo con forma de joy de neon("https://media.istockphoto.com/vectors/colorful-neon-lets-play-sign-with-game-controller-vector-id1174957382?k=20&m=1174957382&s=612x612&w=0&h=7321JRo08er3YChzPh2HkkrfvpYKgbaEzr8L-ebCTsg=") */}
                 {/* <img className="logo" src="https://fondosmil.com/fondo/35731.jpg" alt="to home" /> */}                
                 <br /><br />
-                <Button variant="contained" color="primary">INGRESAR</Button>
+                <button src='/Home'>INGRESAR</button>
+                {/* <Button variant="contained" color="primary">INGRESAR</Button> */}
                 <br /><br /><br />
             </Link>
 

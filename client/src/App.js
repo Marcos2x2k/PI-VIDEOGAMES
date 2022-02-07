@@ -20,8 +20,8 @@ const App = () => {
         <Routes>         
           <Route exact path='/' element={<LandingPage/>}/>   
           <Route exact path='/Home' element={<Home/>}/> 
-          {/* <Route exact path='/home/:id' element={<Detail/>}/> */}
-          <Route path='/games' element={<GameCreate/>}/>        
+          {/* <Route exact path='/games/:id' element={<Detail/>}/> */}
+          <Route path='/newGames' element={<GameCreate/>}/>        
         </Routes>   
     </div>
   //  </BrowserRouter>

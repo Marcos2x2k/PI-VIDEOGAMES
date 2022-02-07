@@ -1,25 +1,38 @@
 import axios from 'axios';
 export const SET_PAGE = 'SET_PAGE';
 
-//aca se realiza la coneccion de back con el front
+
+//aca se realiza la coneccion de back con el front HAGO EN PROMISE MEJOR
+// export function getGames(){
+//     return function(dispatch){
+//         var json = await axios.get("http://localhost:3001/games",{});
+//     return dispatch({
+//         type: 'GET_GAMES',
+//         payload: json.data   
+//     })}}; 
+// HAGO EN PROMISE MEJOR
 export function getGames(){
-    return async function(dispatch){
-        var json = await axios.get("http://localhost:3001/games",{});
-    return dispatch({
-        type: 'GET_GAMES',
-        payload: json.data   
-    })
-}};
+    return function(dispatch){
+        axios.get('http://localhost:3001/games')
+        .then((json) => {
+            dispatch({type: 'GET_GAMES', payload: json.data})
+        })
+        .catch(() =>{
+            console.log ('HUBO UN ERROR EN LOS DATOS');
+        })
+    }
+}
 
 export function getNameGames(name){
     return async function (dispatch){
-        try{
+    try{
         var json = await axios.get("http://localhost:3001/games?name=" + name);
         return dispatch({
             type: "GET_NAME_GAMES",
             payload: json.data
         })
-    } catch (error) {
+    } 
+    catch (error) {
         console.log(error)
     }}
     }
@@ -38,7 +51,7 @@ export function getGenres(){
 // PARA EL POST DE GENRES
 export function postGame(payload){
     return async function (dispatch){
-        const response = await axios.post("http://localhost:3001/genres", payload)
+        const response = await axios.post("http://localhost:3001/games", payload)
         console.log (response);
         return response
     }
@@ -48,7 +61,7 @@ export function postGame(payload){
 export function filterGamesByStatus(payload){
     console.log (payload)
     return {
-        type: 'FILTER_BY_STATUS',
+        type: 'FILTER_GAMES_BY_GENRES',
         payload
     }
 };
@@ -56,7 +69,7 @@ export function filterGamesByStatus(payload){
 //hacemos la accion de filtrar por API o Bdatos // payload trae el value de la accion q elija
 export function filterCreated(payload){
     return{
-        type: 'FILTER_CREATED',
+        type: 'FILTER_GAMES_BY_CREATED',
         payload
     }
 };

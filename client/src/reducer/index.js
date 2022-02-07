@@ -1,11 +1,20 @@
 // ** ACÁ EN REDUCER CREO MI ESTADO INICIAL - 
 // ** Y HAGO LA LOGICA DE MIS FILTRADOS
 const initialState = {
-    games : []
+    games : [],    
+    allGames:[],
+    genres:[],
+    gamesDetails: [],
+    gamesDelete: [],
 }
 
-function rootReducer(state =  initialState, action){
+export default function rootReducer(state =  initialState, action){
     switch(action.type){
+        case 'GET_NAME_GAMES':
+            return{
+                ...state,
+                games: action.payload
+            }  
         case 'GET_GAMES':
             return{
                 ...state, // guardamos el estado anterior como buena practica
@@ -13,35 +22,45 @@ function rootReducer(state =  initialState, action){
                 //Asi creamos en JSON - var json = await axios.get("http://localhost:3001/dogs",{});
                 // el payload lo creamos en actions como payload: json.data
                 allGames: action.payload
-            }  
-        case 'GET_NAME_GAMES':
-            return{
-                ...state,
-                games: action.payload
-            }  
+            }          
         case 'GET_GENRES':
             return{
                 ...state,
                 genres: action.payload
             }  
-        case 'FILTER_BY_STATUS':
-            const allGames = state.allGames
-                const statusFiltered = action.payload === 'All' ? allGames : allGames.filter(el => el.status === action.payload)
-                return{
-                        ...state,
-                        games: statusFiltered
-                }  
+        case 'FILTER_GAMES_BY_GENRES':
+            const allstatusGames = state.games
+            const tempGames = allstatusGames.filter(game => {
+                if(game.genres){ // info viene como [{name:..},{name:..},{name:..}]
+                    const genre = game.genres.map( game => game.name)
+                    return genre.includes(action.payload)}
+                if (game.genre) { //info viene como string
+                    return game.genre.includes(action.payload)
+                }
+                return null
+            })
+
+            return {
+                ...state,
+                games: action.payload === 'sinFiltro' ? allstatusGames : tempGames,
+
+            }
         case 'POST_GAMES':
                  return{
-                    ...state
+                    ...state,
                  }
                 // ? es entonces// : es sino // es un ternario
-        case 'FILTER_CREATED':
-            const allGame2 = state.allGames
-                const createFilter = action.payload === 'created' ? state.allGame2.filter(el => el.gamesdb) : state.allGame2.filter(el => !el.gamesdb)
+        case 'GET_DETAILS_GAME':            
+                return {
+                    ...state,
+                    gamesDetails: action.payload
+                }
+        case 'FILTER_GAMES_BY_CREATED':
+                const allApiGames = state.allGames
+                const createFilter = action.payload === 'created' ? state.allApiGames.filter(el => el.createInDb) : state.allApiGames.filter(el => !el.createInDb)
                 return{
                    ...state,
-                   games: action.payload === 'All' ? state.allGame2 : createFilter // uso ternario
+                   games: action.payload === 'all' ? allApiGames : createFilter // uso ternario
                 }
         case 'ORDER_BY_NAME':
                 let sortedArr = action.payload === 'asc' ?
@@ -72,5 +91,3 @@ function rootReducer(state =  initialState, action){
                 return state;
         }
     }
-
-export default rootReducer;
