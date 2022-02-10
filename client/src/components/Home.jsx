@@ -6,7 +6,7 @@ import './styles/Home.css'; // importo los styles de mi Home.css
 //IMPORTO PORQUE USAMOS HOOKS
 import {useState, useEffect, Fragment} from 'react'; //  HOOK USAMOS useState es un hook (//)Fragment es como un div para envolver hijos div en app)
 import {useDispatch, useSelector} from 'react-redux'; 
-import {getGames, filterGamesByStatus, filterCreated, orderByName, setPage} from '../actions';// Siempre importo las acciones nuevas
+import {getGames, getListGenres, filterGamesByGenre, filterGamesByCreated, orderByName, setPage} from '../actions';// Siempre importo las acciones nuevas
 
 //LINK nos sirve para poder movernos por nuestra aplicación
 //más fácilmente en lugar de tener que cambiar la URL manualmente en el navegador.
@@ -15,12 +15,10 @@ import {Link} from 'react-router-dom';
 //ME IMPORTO EL COMPONENTE Card y renderizo en linea 
 import Card from './Card';
 import SearchBar from './SearchBar';
-
-//IMPORTAMOS EL PAGINADO
 import Paginado from './Paginado';
 
 export default function Home (){ 
-    const { games, name, page, order} = useSelector(state => state);    
+    const { games, name, page, order, genre} = useSelector(state => state);    
     const dispatch = useDispatch(); // PARA USAR HOOKS
     const allGames = useSelector((state) => state.games) //HOOKS es lo mismo q maps.state.props
     const [orden, setOrden] = useState(''); // es un estado local q arranca vacio para el Asc y Desc Order
@@ -35,6 +33,8 @@ export default function Home (){
     // creo una constante de los Games en la pagina actual y me traigo el array del estado de los Games 
     const currentGames =  allGames.slice(indexOfFirstGame, indexOfLastGame)
 
+    const genres = useSelector((state) => state.genres); //estado global de Generos
+
     const paginado = (pageNumber) => {
         setCurrentPage(pageNumber)
     }
@@ -42,6 +42,8 @@ export default function Home (){
     // ** TRAIGO DEL ESTADO LAS RECETAS CUANDO EL COMPONENTE SE MONTA
     useEffect (()=>{
         dispatch(getGames());
+        dispatch(getListGenres());         
+        //getListGenres para usar con filtrados por Genero
     },[dispatch])
 
     // ** PARA RESETEAR AL TOCAR EL BOTON volver a cargar los Juegos
@@ -58,14 +60,16 @@ export default function Home (){
     };
     
 
-    //Aca aplico lógica, esta funcion le paso en el select de Types En HOME -> ALL Generos/Plataformas ETC
-    function handleFilterStatus(p){
-        dispatch(filterGamesByStatus(p.target.value))
+    //Aca aplico lógica, esta funcion le paso en el select de Types 
+    //En HOME -> ALL Generos/Plataformas ETC
+    function handleFilterGamesByGenre(p){
+        dispatch(filterGamesByGenre(p.target.value))
     };
 
     //filtramos los creados en la Bdatos
-    function handleFilterCreated(p){
-        dispatch(filterCreated(p.target.value))
+    function handlefilterGamesByCreated(p) {
+        p.preventDefault();
+        dispatch(filterGamesByCreated(p.target.value))
     };
 
     // paginado orden Asc y Desc
@@ -113,22 +117,29 @@ export default function Home (){
             />   
             <br />
             <select className="selectfont" onChange={p => handleSort(p)}>
-                <option value="" selected disabled hidden>Orden alfabético</option>                
+                <option value="" selected disabled hidden>Por Orden alfabético</option>                
                 <option value='asc'>Ascendente</option>
                 <option value='desc'>Descendente</option>
-            </select>
-            {/* estatus */}
-            <select className="selectfont" onChange={p => handleFilterStatus(p)}>
-                <option value="" selected disabled hidden>Filtrados</option>
-                <option value='genre'>Por Genero</option>
-                {/* <option value='games'>Por Plataforma</option> */}
-            </select>
-            <select className="selectfont"onChange={p => handleFilterCreated(p)}>
-                <option value="" selected disabled hidden>Mostrar Juegos</option> 
-                <option value='All'>Todos los Juegos</option>
+            </select>            
+                       
+            <select className="selectfont"onChange={p => handlefilterGamesByCreated(p)}>
+                {/* <option value="" selected disabled hidden>Mostrar Juegos por</option>  */}
+                <option value='All'>Todos</option>
                 <option value='created'>Creados</option>
-                <option value='api'>Existentes</option>
+                <option value='api'>Api</option>
             </select>   
+
+            <select className="selectfont" onChange={p => handleFilterGamesByGenre(p)}>
+                <option value="sinFiltro">Filtrado por Generos</option>               
+                {genres?.map((p) => {
+                        return (
+                            <option key={p.id} value={p.name}>
+                                {p.name}
+                            </option>
+                        );
+                    })}                    
+                {/* <option value='games'>Por Plataforma</option> */}
+            </select> 
             <br /><br /><br />
         </div>
             {/* aca defino las props que necesita el paginado */}

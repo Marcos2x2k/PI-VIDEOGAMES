@@ -9,30 +9,42 @@ import {useState,useEffect} from 'react';
 import './styles/GameCreate.css';
 import Button from '@material-ui/core/Button';
 
-function validate(input){
-    let errors ={};
-    if (!input.name) {
-        errors.name = 'Se requiere una Nombre de JUEGO';
-    }else if (!input.description) {
-        errors.description = 'se Requiere una Altura'
-    }
-    return errors;
-};
-
 export default function GameCreate (){ 
-    const dispatch = useDispatch();
     // const history = useHistory();
+    const dispatch = useDispatch();    
     const navigate = useNavigate();
-    const genres = useSelector(state => state.genres)
-    const [errors, setErrors] = useState({});
+    const genres = useSelector(state => state.genres)  // Estado Global de los Generos  
+
+    useEffect(() => {
+        dispatch(getGenres())
+    }, [dispatch]) 
 
     const [input, setInput] = useState({
         name:"",      
         description:"",         
-        platform:[], 
+        platform:[],
+        image:"",
+        released:"",
+        rating:"",  
         genre:[],
-        image:"",   
+          
     })
+
+    const [errors, setErrors] = useState({});
+
+    //------------- PARTE DE VALIDACIONES ---------------
+
+    function validate(input){
+        let errors ={};
+        if (!input.name) {
+            errors.name = 'Se requiere una Nombre de JUEGO';
+        }else if (!input.description) {
+            errors.description = 'se Requiere una Altura'
+        }
+        return errors;
+    };
+
+    //------------- PARTE DE HANDLES ---------------------
 
     function handleChange(p) { // va a  ir modificando cuando cambien los input
         setInput({
@@ -63,14 +75,22 @@ export default function GameCreate (){
         })
     }
 
+    //////// GENEROS //////// handleSelect y handleDelete
     const handleSelect = (p) => {
-        const select = input.genres.find(p => p === p.target.value)
+        const select = input.genre.find(p => p === p.target.value)
         if(select) return
         setInput({
             ...input,
-            genre: [...input.genres, p.target.value]
+            genre: [...input.genre, p.target.value]
         })
     }
+    function handleDelete(p){
+        setInput({
+            ...input,
+            // va guardando en el arreglo todo lo que voy eligiendo de generos linea 42
+            genres: input.genres.filter (occ => occ !== p)
+        })
+    }  
 
     function handleSubmit(p) {
         p.preventDefault();
@@ -87,21 +107,15 @@ export default function GameCreate (){
             platform:[],
             genre:[],
             image:"",
+            released:"",
+            rating:"",
         })
         // history.push('/home')
         navigate('/home');
-    }
-
-    function handleDelete(p){
-        setInput({
-            ...input,
-            // va guardando en el arreglo todo lo que voy eligiendo de temperamento linea 42
-            genres: input.genres.filter (occ => occ !== p)
-        })
     }  
-    useEffect(() => {
-        dispatch(getGenres())
-    }, [dispatch]) 
+    
+//-------------------------------------------------------------------------------------------
+
 
     return(
         <>

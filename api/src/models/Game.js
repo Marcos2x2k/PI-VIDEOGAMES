@@ -14,10 +14,6 @@ module.exports = (sequelize) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    image:{
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
     description:{
       type: DataTypes.STRING,
       allowNull: true,
@@ -26,6 +22,18 @@ module.exports = (sequelize) => {
       type: DataTypes.STRING,
       allowNull:true,
     },
+    image:{
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    released:{ // fecha lanzamiento
+      type: DataTypes.STRING,
+      allowNull:true,
+    },    
+    rating:{
+      type: DataTypes.STRING,
+      allowNull:true,
+    },    
     createInDb: {
       type: DataTypes.BOOLEAN,
       allowNull: false,

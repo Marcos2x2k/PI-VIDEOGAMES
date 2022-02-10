@@ -40,11 +40,10 @@ const getApiInfo = async () => {
         name:p.name,        
         description:p.description,        
         platform:p.platforms.map(p=>p),
-        // genre:p.genre,
         genre:p.genres.map(p=>p),
         image:p.background_image,
-        //released:released, //Fecha de lanzamiento
-        //rating: p.rating,
+        released:p.released, //Fecha de lanzamiento
+        rating:p.rating,
         //ratings: p.ratings.map(a=>a),        
     }})
         return ApiInfo;
@@ -168,6 +167,8 @@ router.post('/newGames', async (req, res) => {
         platform,
         genre,
         image,
+        rating,
+        released,
         createInDb,
     } = req.body
 
@@ -177,6 +178,8 @@ router.post('/newGames', async (req, res) => {
         platform,
         genre,
         image,
+        rating,
+        released,
         createInDb,
         })
     

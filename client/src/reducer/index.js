@@ -29,35 +29,38 @@ export default function rootReducer(state =  initialState, action){
                 genres: action.payload
             }  
         case 'FILTER_GAMES_BY_GENRES':
-            const allstatusGames = state.games
-            const tempGames = allstatusGames.filter(game => {
-                if(game.genres){ // info viene como [{name:..},{name:..},{name:..}]
-                    const genre = game.genres.map( game => game.name)
+            const allStateGames = state.games
+            const tempGames = allStateGames.filter(p => {
+                if(p.genres){ // info viene como [{name:..},{name:..},{name:..}]
+                    const genre = p.genres.map( p => p.name)
                     return genre.includes(action.payload)}
-                if (game.genre) { //info viene como string
-                    return game.genre.includes(action.payload)
+                if (p.genre) { //info viene como string
+                    return p.genre.includes(action.payload)
                 }
                 return null
             })
-
             return {
                 ...state,
-                games: action.payload === 'sinFiltro' ? allstatusGames : tempGames,
-
+                games: action.payload === 'sinFiltro' ? allStateGames : tempGames,
+                // ? es entonces// : es sino // es un ternario
             }
-        case 'POST_GAMES':
+        case 'POST_GAMES'://No se declara en actions, se declara en el reducer. 
+                          //en action solo se trae la ruta
                  return{
                     ...state,
                  }
-                // ? es entonces// : es sino // es un ternario
+                
         case 'GET_DETAILS_GAME':            
                 return {
                     ...state,
                     gamesDetails: action.payload
                 }
+
         case 'FILTER_GAMES_BY_CREATED':
                 const allApiGames = state.allGames
-                const createFilter = action.payload === 'created' ? state.allApiGames.filter(el => el.createInDb) : state.allApiGames.filter(el => !el.createInDb)
+                const createFilter = action.payload === 'created' ? 
+                        state.allApiGames.filter(el => el.createInDb) :
+                        state.allApiGames.filter(el => !el.createInDb)
                 return{
                    ...state,
                    games: action.payload === 'all' ? allApiGames : createFilter // uso ternario

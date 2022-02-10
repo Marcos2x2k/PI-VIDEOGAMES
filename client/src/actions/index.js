@@ -11,7 +11,7 @@ export const SET_PAGE = 'SET_PAGE';
 //         payload: json.data   
 //     })}}; 
 // HAGO EN PROMISE MEJOR
-export function getGames(){
+export function getGames(){  // esta Action permite renderizar todos los Games
     return function(dispatch){
         axios.get('http://localhost:3001/games')
         .then((json) => {
@@ -23,7 +23,7 @@ export function getGames(){
     }
 }
 
-export function getNameGames(name){
+export function getNameGames(name){ // esta Action permite buscar todos los Games por nombres
     return async function (dispatch){
     try{
         var json = await axios.get("http://localhost:3001/games?name=" + name);
@@ -39,8 +39,7 @@ export function getNameGames(name){
 //despacha ruta del back con los Generos
 export function getGenres(){
     return async function (dispatch){
-        var json = await axios.get("http://localhost:3001/genres", {
-            
+        var json = await axios.get("http://localhost:3001/genres", {            
         });
         // var info = await axios(`http://localhost:3001/types/${name}`); otra forma
         return dispatch({
@@ -49,16 +48,26 @@ export function getGenres(){
     };
 }
 // PARA EL POST DE GENRES
-export function postGame(payload){
+export function postGame(payload){ //recibe un objeto con toda la info del Game a crear (GameCreate)
     return async function (dispatch){
         const response = await axios.post("http://localhost:3001/games", payload)
         console.log (response);
         return response
     }
 }
-    
+
+export function getListGenres(){ //(GameCreate) (HOME) Me trae los Generos
+    return function(dispatch){
+        axios.get('http://localhost:3001/genres')
+        .then((response)=>{
+            dispatch({type:'GET_GENRES', payload: response.data})
+        }) 
+        .catch(()=>{ alert('Error al traer Generos')})
+    }
+}
+
 // la logica siempre hacerla en reducer o en los components
-export function filterGamesByStatus(payload){
+export function filterGamesByGenre(payload){
     console.log (payload)
     return {
         type: 'FILTER_GAMES_BY_GENRES',
@@ -67,10 +76,10 @@ export function filterGamesByStatus(payload){
 };
 
 //hacemos la accion de filtrar por API o Bdatos // payload trae el value de la accion q elija
-export function filterCreated(payload){
+export function filterGamesByCreated(value){ //accion para filtrar los Juegos creados por el usuario
     return{
         type: 'FILTER_GAMES_BY_CREATED',
-        payload
+        payload: value
     }
 };
 
