@@ -129,19 +129,17 @@ router.get('/genres', async (req, res) => {
     //var apiHtml = await axios.get(`https://api.rawg.io/api/platforms/lists/parents?key=${API_KEY2}`)    
    
     const genres = apiHtml.data.results.map(p => p.name) 
-    const genre = await genres.filter(p => p.length > 0); // para verificar q no traiga nada vacio    
+    const genre = await genres.filter(p => p.length > 0); // para verificar q no traiga nada vacio  
    
     //recorro todo buscando y me traigo los generos de la base de datos busca o lo crea si no existe
     genre.forEach(p => { 
         if (p!==undefined) Genres.findOrCreate({where:{name:p}})
     })  
-    const allGenres = await Genres.findAll();
-    // console.log ("ALL API GENRE"+ genres)
-    //console.log ("GENRES NAME"+ genreName)        
+    const allGenres = await Genres.findAll();           
     // console.log ("ALL GENRES"+ allGenres)        
     res.send(allGenres);
     });
-    
+
 
 // router.get('/games?search={name}', async (req, res) => {});
 

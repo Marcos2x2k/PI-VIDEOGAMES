@@ -31,9 +31,9 @@ export default function rootReducer(state =  initialState, action){
         case 'FILTER_GAMES_BY_GENRES':
             const allStateGames = state.games
             const tempGames = allStateGames.filter(p => {
-                if(p.genres){ // info viene como [{name:..},{name:..},{name:..}]
-                    const genre = p.genres.map( p => p.name)
-                    return genre.includes(action.payload)}
+                if(p.genre){ // info viene como [{name:..},{name:..},{name:..}]
+                    const genres = p.genre.map( p => p.name)
+                    return genres.includes(action.payload)}
                 if (p.genre) { //info viene como string
                     return p.genre.includes(action.payload)
                 }
