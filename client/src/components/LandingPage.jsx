@@ -21,6 +21,7 @@ export default function LandingPage(){
                 {/* <img className="logo" src="https://fondosmil.com/fondo/35731.jpg" alt="to home" /> */}                
                 <br /><br />
                 <button src='/Home'>INGRESAR</button>
+                {/* <Link to='/games'><button>Home</button></Link> */}
                 {/* <Button variant="contained" color="primary">INGRESAR</Button> */}
                 <br /><br /><br />
             </Link>

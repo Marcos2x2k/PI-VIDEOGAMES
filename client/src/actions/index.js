@@ -39,8 +39,7 @@ export function getNameGames(name){ // esta Action permite buscar todos los Game
 //despacha ruta del back con los Generos
 export function getGenres(){
     return async function (dispatch){
-        var json = await axios.get("http://localhost:3001/genres", {            
-        });
+        var json = await axios.get("http://localhost:3001/genres", {});
         // var info = await axios(`http://localhost:3001/types/${name}`); otra forma
         return dispatch({
             type: "GET_GENRES", 
@@ -51,7 +50,7 @@ export function getGenres(){
 export function postGame(payload){ //recibe un objeto con toda la info del Game a crear (GameCreate)
     return async function (dispatch){
         const response = await axios.post("http://localhost:3001/games", payload)
-        console.log (response);
+        //console.log (response);
         return response
     }
 }
@@ -76,10 +75,11 @@ export function filterGamesByGenre(payload){
 };
 
 //hacemos la accion de filtrar por API o Bdatos // payload trae el value de la accion q elija
-export function filterGamesByCreated(value){ //accion para filtrar los Juegos creados por el usuario
+export function filterGamesByCreated(payload){ //payload es el value q me llega
+    // console.log(payload)
     return{
         type: 'FILTER_GAMES_BY_CREATED',
-        payload: value
+        payload
     }
 };
 

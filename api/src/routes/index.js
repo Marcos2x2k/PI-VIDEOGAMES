@@ -39,8 +39,8 @@ const getApiInfo = async () => {
         id: p.id,//.map(p=>p),
         name:p.name,        
         description:p.description,        
-        platform:p.platforms.map(p=>p),
-        genre:p.genres.map(p=>p),
+        platform:p.platforms.map(a=>a),
+        genre:p.genres.map(a=>a),
         image:p.background_image,
         released:p.released, //Fecha de lanzamiento
         rating:p.rating,
@@ -53,9 +53,9 @@ const getApiInfo = async () => {
     }
 };
 
-const getDbInfo = async () => {
-    try {
-        return await Games.findAll({
+
+const getDbInfo = async () => {    
+    let infoDB = await Games.findAll({
             include: {
                 model: Genres,
                 attributes: ['name'],
@@ -64,9 +64,7 @@ const getDbInfo = async () => {
                 },
             },
         });
-
-    } catch (error) {
-        console.log(error);
+        return infoDB;    
     }
     // return await Games.findAll({  //traigo la info de mi base de datos
     //     include: {  // ademas de todo traeme temperament 
@@ -77,8 +75,6 @@ const getDbInfo = async () => {
     //         },
     //     }
     // })
-};
-
 
 const getAllGames = async () => {
     //const getAllVgames = async() => {
@@ -125,12 +121,9 @@ router.get('/games', async (req, res) => {
 
 router.get('/genres', async (req, res) => {
     var apiHtml = await axios.get(`https://api.rawg.io/api/genres?key=${API_KEY}`)
-    // ** para llamar por plataforma
-    //var apiHtml = await axios.get(`https://api.rawg.io/api/platforms/lists/parents?key=${API_KEY2}`)    
-   
+    // ** para llamar por plataforma 
     const genres = apiHtml.data.results.map(p => p.name) 
-    const genre = await genres.filter(p => p.length > 0); // para verificar q no traiga nada vacio  
-   
+    const genre = await genres.filter(p => p.length > 0); // para verificar q no traiga nada vacio    
     //recorro todo buscando y me traigo los generos de la base de datos busca o lo crea si no existe
     genre.forEach(p => { 
         if (p!==undefined) Genres.findOrCreate({where:{name:p}})
@@ -139,8 +132,6 @@ router.get('/genres', async (req, res) => {
     // console.log ("ALL GENRES"+ allGenres)        
     res.send(allGenres);
     });
-
-
 // router.get('/games?search={name}', async (req, res) => {});
 
 router.get("/games/:id", async (req, res) => {

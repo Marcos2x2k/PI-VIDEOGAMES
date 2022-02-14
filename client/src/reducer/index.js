@@ -8,13 +8,9 @@ const initialState = {
     gamesDelete: [],
 }
 
-export default function rootReducer(state =  initialState, action){
+export default function rootReducer(state =  initialState, action){ //action.payload llega las opciones del select
     switch(action.type){
-        case 'GET_NAME_GAMES':
-            return{
-                ...state,
-                games: action.payload
-            }  
+        
         case 'GET_GAMES':
             return{
                 ...state, // guardamos el estado anterior como buena practica
@@ -22,10 +18,15 @@ export default function rootReducer(state =  initialState, action){
                 //Asi creamos en JSON - var json = await axios.get("http://localhost:3001/dogs",{});
                 // el payload lo creamos en actions como payload: json.data
                 allGames: action.payload
-            }          
-        case 'GET_GENRES':
+            }      
+        case 'GET_NAME_GAMES':
             return{
                 ...state,
+                games: action.payload
+            }      
+        case 'GET_GENRES':            
+            return{
+                ...state,                
                 genres: action.payload
             }  
         case 'FILTER_GAMES_BY_GENRES':
@@ -47,7 +48,7 @@ export default function rootReducer(state =  initialState, action){
         case 'POST_GAMES'://No se declara en actions, se declara en el reducer. 
                           //en action solo se trae la ruta
                  return{
-                    ...state,
+                    ...state
                  }
                 
         case 'GET_DETAILS_GAME':            
@@ -56,14 +57,12 @@ export default function rootReducer(state =  initialState, action){
                     gamesDetails: action.payload
                 }
 
-        case 'FILTER_GAMES_BY_CREATED':
-                const allApiGames = state.allGames
-                const createFilter = action.payload === 'created' ? 
-                        state.allApiGames.filter(el => el.createInDb) :
-                        state.allApiGames.filter(el => !el.createInDb)
+        case 'FILTER_GAMES_BY_CREATED':                
+                // uso ternario
+                const createGames = action.payload === 'created' ? state.allGames.filter(p => p.status.createInDb) : state.allGames.filter(p => !p.status.createInDb)
                 return{
                    ...state,
-                   games: action.payload === 'all' ? allApiGames : createFilter // uso ternario
+                   games: createGames 
                 }
         case 'ORDER_BY_NAME':
                 let sortedArr = action.payload === 'asc' ?

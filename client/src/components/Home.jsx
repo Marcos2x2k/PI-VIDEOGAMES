@@ -18,7 +18,7 @@ import SearchBar from './SearchBar';
 import Paginado from './Paginado';
 
 export default function Home (){ 
-    const { games, name, page, order, genre} = useSelector(state => state);    
+    // const { games, name, page, order, genre} = useSelector(state => state);    
     const dispatch = useDispatch(); // PARA USAR HOOKS
     const allGames = useSelector((state) => state.games) //HOOKS es lo mismo q maps.state.props
     const [orden, setOrden] = useState(''); // es un estado local q arranca vacio para el Asc y Desc Order
@@ -68,7 +68,7 @@ export default function Home (){
 
     //filtramos los creados en la Bdatos
     function handlefilterGamesByCreated(p) {
-        p.preventDefault();
+        //p.preventDefault();
         dispatch(filterGamesByCreated(p.target.value))
     };
 
@@ -80,10 +80,10 @@ export default function Home (){
         setOrden(`Ordenado ${p.target.value}`)  //es un estado local vacio, lo uso para modif estado local y renderize
     };
 
-    const handleClickPage = (page) => {
-        dispatch(getGames({ page, name, order }));
-        dispatch(setPage(page));
-    }
+    // const handleClickPage = (page) => {
+    //     dispatch(getGames({ page, name, order }));
+    //     dispatch(setPage(page));
+    // }
 
     const totalPages = (pageNumber) => {
         setCurrentPage(pageNumber);
@@ -114,7 +114,8 @@ export default function Home (){
         
         <div className="selectfont">
         <SearchBar
-            />   
+        />          
+        <div>
             <br />
             <select className="selectfont" onChange={p => handleSort(p)}>
                 <option value="" selected disabled hidden>Por Orden alfabético</option>                
@@ -122,11 +123,10 @@ export default function Home (){
                 <option value='desc'>Descendente</option>
             </select>            
                        
-            <select className="selectfont"onChange={p => handlefilterGamesByCreated(p)}>
-                {/* <option value="" selected disabled hidden>Mostrar Juegos por</option>  */}
-                <option value='All'>Todos</option>
-                <option value='created'>Creados</option>
-                <option value='api'>Api</option>
+            <select className="selectfont" onChange={p => handlefilterGamesByCreated(p)}>                
+                <option value="all">Todos Los Juegos</option>
+                <option value="created">Creados</option>
+                <option value="api">Api</option>
             </select>   
 
             <select className="selectfont" onChange={p => handleFilterGamesByGenre(p)}>
@@ -142,34 +142,34 @@ export default function Home (){
             </select> 
             <br /><br /><br />
         </div>
+    </div>
             {/* aca defino las props que necesita el paginado */}
             <Paginado
                     gamesPerPage = {gamesPerPage}
                     allGames={allGames.length}
                     paginado = {paginado}                    
-            />
-            
+            />             
                 {/* ACA NE TRAIGO LA CARD PARA RENDERIZAR con los datos que quiero */}
                 {currentGames?.map ((p) =>{  // CON ? PREGUNTA SI EXISTE Y DESPUES MAPEA
                     return(
-                    // <Fragment>
-                    <div className="carddirection">    
+                    //<Fragment>                    
+                        <div className="carddirection">                           
                             <Link 
                                 key={p.id}
-                                to={`/games/${p.id}`}
+                                to={`/games/${p.id}`}                            
                             >
-                                {/* //pase por props .name .image .genre  */}  
-                            <Card 
+                            <Card
                                     name={p.name} 
-                                    image={p.image ? p.image : p.image} 
-                                    genre={p.genre}
-                            />
+                                    image={p.image ? p.image : p.image}
+                                    genre={p.genre.map(g=>g.name)}
+                                    //platform={p.platforms.data.results.map(g=>g.name)}
+
+                            />                        
                             </Link>
                     </div>
-                    // /</Fragment> 
+                    //</Fragment> 
                     );
                 })}
             </div> 
-    </div>
-        
+    </div>        
     )}
