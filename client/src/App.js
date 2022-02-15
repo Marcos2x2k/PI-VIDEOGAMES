@@ -7,6 +7,7 @@ import {Routes, Route} from 'react-router-dom'; //, BrowserRouter
 import LandingPage from './components/LandingPage.jsx'
 import Home from './components/Home.jsx';
 import GameCreate from './components/GameCreate.jsx';
+import Details from './components/Details.jsx'
 
 
 //function App() { // me gusta mas trabajar con constantes
@@ -20,7 +21,7 @@ const App = () => {
         <Routes>         
           <Route exact path='/' element={<LandingPage/>}/>   
           <Route exact path='/Home' element={<Home/>}/> 
-          {/* <Route exact path='/games/:id' element={<Detail/>}/> */}
+          <Route exact path='/games/:id' element={<Details/>}/>
           <Route path='/newGames' element={<GameCreate/>}/>        
         </Routes>   
     </div>

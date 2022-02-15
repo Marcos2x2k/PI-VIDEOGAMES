@@ -55,6 +55,18 @@ export function postGame(payload){ //recibe un objeto con toda la info del Game 
     }
 }
 
+export function getDetailsGames(id){
+    return function(dispatch){
+        axios.get('http://localhost:3001/games/'+ id)
+        .then((response)=>{
+            dispatch({type:'GET_DETAILS_GAMES', payload: response.data})
+        })
+        .catch(()=>{
+            console.log('No se encuentra Id');
+        })
+    }
+}
+
 export function getListGenres(){ //(GameCreate) (HOME) Me trae los Generos
     return function(dispatch){
         axios.get('http://localhost:3001/genres')
@@ -75,11 +87,11 @@ export function filterGamesByGenre(payload){
 };
 
 //hacemos la accion de filtrar por API o Bdatos // payload trae el value de la accion q elija
-export function filterGamesByCreated(payload){ //payload es el value q me llega
+export function filterCreated(value){ //payload es el value q me llega
     // console.log(payload)
     return{
-        type: 'FILTER_GAMES_BY_CREATED',
-        payload
+        type: 'FILTER_CREATED',
+        payload: value
     }
 };
 

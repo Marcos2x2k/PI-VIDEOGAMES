@@ -88,7 +88,7 @@ export default function GameCreate (){
         setInput({
             ...input,
             // va guardando en el arreglo todo lo que voy eligiendo de generos linea 42
-            genres: input.genres.filter (occ => occ !== p)
+            genre: input.genre.filter (occ => occ !== p)
         })
     }  
 
@@ -98,7 +98,7 @@ export default function GameCreate (){
         setErrors(validate({
             ...input,
             [p.target.name]: p.target.value
-        }));
+        }));        
         dispatch(postGame(input)) // input es el payload
         alert ("JUEGO Creado!!!")
         setInput({ // seteo el input a cero
@@ -190,10 +190,7 @@ export default function GameCreate (){
                             </option>
                         );
                     })}
-                    {
-                    input.genre.length < 10 ? <p> Select 10 Generos</p>
-                        : null
-                    }
+                    
                     </select >
                     <br/><br/><br/>                  
                     <button type='submit'>Crear Personaje</button>   

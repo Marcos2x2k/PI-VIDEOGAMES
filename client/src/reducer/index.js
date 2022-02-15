@@ -51,19 +51,25 @@ export default function rootReducer(state =  initialState, action){ //action.pay
                     ...state
                  }
                 
-        case 'GET_DETAILS_GAME':            
+        case 'GET_DETAILS_GAMES':            
                 return {
                     ...state,
                     gamesDetails: action.payload
                 }
 
-        case 'FILTER_GAMES_BY_CREATED':                
+        case 'FILTER_CREATED':                
                 // uso ternario
-                const createGames = action.payload === 'created' ? state.allGames.filter(p => p.status.createInDb) : state.allGames.filter(p => !p.status.createInDb)
+                const allGameApiDB = state.allGames
+                const createFilter = action.payload === 'created' ? allGameApiDB.filter(p => p.createInDb) : allGameApiDB.filter(p => !p.createInDb)
                 return{
                    ...state,
-                   games: createGames 
+                   games: action.payload === 'all' ? allGameApiDB : createFilter
                 }
+                // const createGames = action.payload === 'created' ? allGames : allGames.filter(p => p.status.createInDb) : state.allGames.filter(p => !p.status.createInDb)
+                // return{
+                //    ...state,
+                //    games: createGames 
+                // }
         case 'ORDER_BY_NAME':
                 let sortedArr = action.payload === 'asc' ?
                 state.games.sort(function(a,b){

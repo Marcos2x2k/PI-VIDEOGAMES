@@ -9,7 +9,7 @@ router.use(express.json())
 const axios = require('axios');
 
 // aca defino models y me los traigo de la BD
-const { Games, Genres} = require('../db.js'); //importo los modelos conectados
+const { Game, Genre} = require('../db.js'); //importo los modelos conectados
 const {API_KEY} = process.env;
 
 // Configurar los routers
@@ -53,11 +53,10 @@ const getApiInfo = async () => {
     }
 };
 
-
 const getDbInfo = async () => {    
-    let infoDB = await Games.findAll({
+    const infoDB = await Game.findAll({
             include: {
-                model: Genres,
+                model: Genre,
                 attributes: ['name'],
                 through: {
                     attributes:[],
@@ -123,12 +122,12 @@ router.get('/genres', async (req, res) => {
     var apiHtml = await axios.get(`https://api.rawg.io/api/genres?key=${API_KEY}`)
     // ** para llamar por plataforma 
     const genres = apiHtml.data.results.map(p => p.name) 
-    const genre = await genres.filter(p => p.length > 0); // para verificar q no traiga nada vacio    
+    const genre1 = await genres.filter(p => p.length > 0); // para verificar q no traiga nada vacio    
     //recorro todo buscando y me traigo los generos de la base de datos busca o lo crea si no existe
-    genre.forEach(p => { 
-        if (p!==undefined) Genres.findOrCreate({where:{name:p}})
+    genre1.forEach(p => { 
+        if (p!==undefined) Genre.findOrCreate({where:{name:p}})
     })  
-    const allGenres = await Genres.findAll();           
+    const allGenres = await Genre.findAll();           
     // console.log ("ALL GENRES"+ allGenres)        
     res.send(allGenres);
     });
@@ -161,7 +160,7 @@ router.post('/newGames', async (req, res) => {
         createInDb,
     } = req.body
 
-    let gamesCreated = await Games.create({ 
+    let gamesCreated = await Game.create({ 
         name,        
         description,        
         platform,
@@ -172,12 +171,11 @@ router.post('/newGames', async (req, res) => {
         createInDb,
         })
     
-        let genresDb = await Genres.findAll({
+        let genresDb = await Genre.findAll({
             where: { name: genre }
         })
         gamesCreated.addGenres(genresDb)
         res.send('Video Juego Creado')
 });
-
 
 module.exports = router;

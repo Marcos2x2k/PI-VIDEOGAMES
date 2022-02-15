@@ -6,7 +6,7 @@ import './styles/Home.css'; // importo los styles de mi Home.css
 //IMPORTO PORQUE USAMOS HOOKS
 import {useState, useEffect, Fragment} from 'react'; //  HOOK USAMOS useState es un hook (//)Fragment es como un div para envolver hijos div en app)
 import {useDispatch, useSelector} from 'react-redux'; 
-import {getGames, getListGenres, filterGamesByGenre, filterGamesByCreated, orderByName, setPage} from '../actions';// Siempre importo las acciones nuevas
+import {getGames, getListGenres, filterGamesByGenre, filterCreated, orderByName, setPage} from '../actions';// Siempre importo las acciones nuevas
 
 //LINK nos sirve para poder movernos por nuestra aplicación
 //más fácilmente en lugar de tener que cambiar la URL manualmente en el navegador.
@@ -39,7 +39,7 @@ export default function Home (){
         setCurrentPage(pageNumber)
     }
 
-    // ** TRAIGO DEL ESTADO LAS RECETAS CUANDO EL COMPONENTE SE MONTA
+    // ** TRAIGO DEL ESTADO LOS GENEROS CUANDO EL COMPONENTE SE MONTA
     useEffect (()=>{
         dispatch(getGames());
         dispatch(getListGenres());         
@@ -67,9 +67,9 @@ export default function Home (){
     };
 
     //filtramos los creados en la Bdatos
-    function handlefilterGamesByCreated(p) {
-        //p.preventDefault();
-        dispatch(filterGamesByCreated(p.target.value))
+    function handleFilterCreated(p) {
+        p.preventDefault();
+        dispatch(filterCreated(p.target.value))
     };
 
     // paginado orden Asc y Desc
@@ -111,26 +111,25 @@ export default function Home (){
         </div>            
             
             <br />
-        
-        <div className="selectfont">
         <SearchBar
-        />          
-        <div>
+        />  
+        <div>                
+        <div className="selectfont">
             <br />
             <select className="selectfont" onChange={p => handleSort(p)}>
                 <option value="" selected disabled hidden>Por Orden alfabético</option>                
-                <option value='asc'>Ascendente</option>
-                <option value='desc'>Descendente</option>
+                <option value='asc'>Ascendente A-Z</option>
+                <option value='desc'>Descendente Z-A</option>
             </select>            
                        
-            <select className="selectfont" onChange={p => handlefilterGamesByCreated(p)}>                
+            <select className="selectfont" onChange={p => handleFilterCreated(p)}>                
                 <option value="all">Todos Los Juegos</option>
                 <option value="created">Creados</option>
-                <option value="api">Api</option>
+                {/* <option value="api">Api</option> */}
             </select>   
 
             <select className="selectfont" onChange={p => handleFilterGamesByGenre(p)}>
-                <option value="sinFiltro">Filtrado por Generos</option>               
+                <option value="sinFiltro">Todos los Generos</option>               
                 {genres?.map((p) => {
                         return (
                             <option key={p.id} value={p.name}>
@@ -152,7 +151,7 @@ export default function Home (){
                 {/* ACA NE TRAIGO LA CARD PARA RENDERIZAR con los datos que quiero */}
                 {currentGames?.map ((p) =>{  // CON ? PREGUNTA SI EXISTE Y DESPUES MAPEA
                     return(
-                    //<Fragment>                    
+                    <Fragment>                    
                         <div className="carddirection">                           
                             <Link 
                                 key={p.id}
@@ -161,13 +160,13 @@ export default function Home (){
                             <Card
                                     name={p.name} 
                                     image={p.image ? p.image : p.image}
-                                    genre={p.genre.map(g=>g.name)}
+                                    genre={p.genre}  
+                                    genres={p.genres}                               
                                     //platform={p.platforms.data.results.map(g=>g.name)}
-
                             />                        
                             </Link>
                     </div>
-                    //</Fragment> 
+                    </Fragment> 
                     );
                 })}
             </div> 
