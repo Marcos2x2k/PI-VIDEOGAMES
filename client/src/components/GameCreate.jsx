@@ -2,12 +2,12 @@ import React from 'react';
 // import { useHistory } from 'react-router';
 import { useNavigate } from 'react-router-dom';
 import {Link} from 'react-router-dom';
-import {postGame, getGenres} from '../actions';
+import {postGame, getGenres, getListGenres } from '../actions';
 import { useDispatch, useSelector } from 'react-redux';
 import {useState,useEffect} from 'react';
 
 import './styles/GameCreate.css';
-import Button from '@material-ui/core/Button';
+//import Button from '@material-ui/core/Button';
 
 export default function GameCreate (){ 
     // const history = useHistory();
@@ -16,18 +16,17 @@ export default function GameCreate (){
     const genres = useSelector(state => state.genres)  // Estado Global de los Generos  
 
     useEffect(() => {
-        dispatch(getGenres())
+        dispatch(getListGenres())
     }, [dispatch]) 
 
     const [input, setInput] = useState({
         name:"",      
         description:"",         
-        platform:[],
+        platform:"",
+        genre:[],
         image:"",
         released:"",
-        rating:"",  
-        genre:[],
-          
+        rating:"",          
     })
 
     const [errors, setErrors] = useState({});
@@ -58,22 +57,22 @@ export default function GameCreate (){
         console.log(input)
     }
 
-    function handleCheck(p) {
-        if (p.target.checked){
-            setInput({
-                ...input,
-                status: p.target.value
-            })
-        }
-    }
+    // function handleCheck(p) {
+    //     if (p.target.checked){
+    //         setInput({
+    //             ...input,
+    //             status: p.target.value
+    //         })
+    //     }
+    // }
     
-    const handleOnChange = (p) => {
-        //seteo el input
-        setInput({
-            ...input,
-            [p.target.name]: p.target.value
-        })
-    }
+    // const handleOnChange = (p) => {
+    //     //seteo el input
+    //     setInput({
+    //         ...input,
+    //         [p.target.name]: p.target.value
+    //     })
+    // }
 
     //////// GENEROS //////// handleSelect y handleDelete
     const handleSelect = (p) => {
@@ -104,7 +103,7 @@ export default function GameCreate (){
         setInput({ // seteo el input a cero
             name:"",      
             description:"",         
-            platform:[],
+            platform:"",
             genre:[],
             image:"",
             released:"",
@@ -119,19 +118,21 @@ export default function GameCreate (){
 
     return(
         <>
-        <div>
-        <Link to= '/home'><button>Volver</button></Link>             
+        <div>                        
             <div className="padre">
                 <h1 className="colorLetrasBienvenido">** Crear Nuevo Juego **</h1>
             </div>
         </div>   
             <div>            
-            <Button  variant="contained" color="secondary" href="/">
+            {/* <Button  variant="contained" color="secondary" href="/">
                     Ir a Pagina de Lanzamiento
             </Button> 
             <Button  variant="contained" color="primary" href="/Home">
                     Ir a Pagina Home
-            </Button> 
+            </Button>  */}
+            <br/>
+            <Link to= '/'><button>Ir a Pagina de Lanzamiento</button></Link> 
+            <Link to= '/home'><button>Ir a Pagina Home</button></Link> 
             {/* <Button  variant="contained" color="secondary" onClick={p => {handleClick(p)}}>
                     ACEPTAR Y CREAR
             </Button> */}
@@ -145,33 +146,44 @@ export default function GameCreate (){
                     value= {input.name}
                     name="name"
                     onChange={(p)=>handleChange(p)}
+                    autoComplete="off"
                     />
                     {errors.name && (
                         <p className='error'>{errors.name}</p>
-                    )}
-                </div>
-                <br/> 
-                <div>
+                    )}                
+                <br/><br/>                 
                     <label className="hijo">Descripción:</label>
                     <input
                     type="text"
                     value= {input.description}
                     name="description"
                     onChange={(p)=>handleChange(p)}
-                    />
-                </div>
-                <br/> 
-                <div>
-                    <label className="hijo">plataforma:</label>
+                    />                
+                <br/><br/>          
+                    <label className="hijo">Plataforma:</label>
                     <input
                     type="text"
                     value= {input.platform}
                     name="platform"
                     onChange={(p)=>handleChange(p)}
                     />
-                </div>
-                <br/> 
-                <div>
+                <br/><br/>                 
+                    <label className="hijo">Rating:</label>
+                    <input
+                    type="text"
+                    value= {input.rating}
+                    name="rating"
+                    onChange={(p)=>handleChange(p)}
+                    />   
+                <br/><br/>              
+                    <label className="hijo">Fecha Lanzamiento:</label>
+                    <input
+                    type="text"
+                    value= {input.released}
+                    name="released"
+                    onChange={(p)=>handleChange(p)}
+                    />                
+                <br/><br/>                
                     <label className="hijo">Imagen:</label>
                     <input
                     type="text"
@@ -179,9 +191,10 @@ export default function GameCreate (){
                     name="image"
                     onChange={handleChange}
                     />
+                    <div>
                     <br/> <br/>
-                    <select onChange={(p)=>handleSelect(p)}>
-                    <br/>
+                    <label className="hijo">Genero:</label>
+                    <select onChange={(p)=>handleSelect(p)}>                    
                     <option value="">--Seleccione Genero--</option>
                         {genres?.map((gen) => {
                         return (
@@ -189,23 +202,18 @@ export default function GameCreate (){
                                 {gen.name}
                             </option>
                         );
-                    })}
-                    
+                    })}                    
                     </select >
-                    <br/><br/><br/>                  
-                    <button type='submit'>Crear Personaje</button>   
-                </div>                            
-                
-            </form>  
-             
-            {input.genre.map(el => 
-                <div className='divOcc'>
-                    <p>{el}</p>
-                <button className="botonX" onClick={el => {handleDelete(el)}}>x</button>
-              </div>
-            )}
+                    {input.genre.map(el => 
+                    <div className='divOcc'>
+                        <p>{el}</p>
+                    <button onClick={el => {handleDelete(el)}}>X</button>
+                    </div>
+                    )}
+                    </div>                       
+                </div>
+                <br/><br/><br/>                  
+                <button type='submit'>Crear Personaje</button> 
+            </form> 
         </>            
     )}
-
-
-

@@ -24,7 +24,6 @@ function Details(){
             <div>
                 <br /><br />
                 <Link to='/home'><button>REGRESAR AL HOME</button></Link>
-                {/* <button src='/Home'>T O - H O M E</button> */}
                 <br /><br /><br />
 
                 <h1 class="heading">{allDetails[0].name}</h1>

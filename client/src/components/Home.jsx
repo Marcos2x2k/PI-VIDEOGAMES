@@ -1,12 +1,12 @@
 import React from 'react';
-import Button from '@material-ui/core/Button'; // importo estilo de boton
+//import Button from '@material-ui/core/Button'; // importo estilo de boton
 import './styles/Home.css'; // importo los styles de mi Home.css
 // import SearchBar from './SearchBar';
 
 //IMPORTO PORQUE USAMOS HOOKS
 import {useState, useEffect, Fragment} from 'react'; //  HOOK USAMOS useState es un hook (//)Fragment es como un div para envolver hijos div en app)
 import {useDispatch, useSelector} from 'react-redux'; 
-import {getGames, getListGenres, filterGamesByGenre, filterCreated, orderByName, setPage} from '../actions';// Siempre importo las acciones nuevas
+import {getGames, getListGenres, filterGamesByGenre, filterCreated, orderByName, setPage} from '../actions';//Siempre importo las acciones nuevas 
 
 //LINK nos sirve para poder movernos por nuestra aplicación
 //más fácilmente en lugar de tener que cambiar la URL manualmente en el navegador.
@@ -18,7 +18,7 @@ import SearchBar from './SearchBar';
 import Paginado from './Paginado';
 
 export default function Home (){ 
-    // const { games, name, page, order, genre} = useSelector(state => state);    
+    const { games, name, page, order, genre} = useSelector(state => state);    
     const dispatch = useDispatch(); // PARA USAR HOOKS
     const allGames = useSelector((state) => state.games) //HOOKS es lo mismo q maps.state.props
     const [orden, setOrden] = useState(''); // es un estado local q arranca vacio para el Asc y Desc Order
@@ -85,9 +85,9 @@ export default function Home (){
     //     dispatch(setPage(page));
     // }
 
-    const totalPages = (pageNumber) => {
-        setCurrentPage(pageNumber);
-    };
+    // const totalPages = (pageNumber) => {
+    //     setCurrentPage(pageNumber);
+    // };
 
 // RENDERIZADOS
 // Aca renderizamos un Div
@@ -99,7 +99,7 @@ export default function Home (){
                 <h1 className="colorLetrasBienvenido">** Bienvenidos a mi App de Juegos **</h1>
             </div>
         <div>
-            <Button  variant="contained" color="primary" onClick={p => {handleClick(p)}}>
+            {/* <Button  variant="contained" color="primary" onClick={p => {handleClick(p)}}>
                 Volver a Cargar todos los Juegos
             </Button>  
             <Button  variant="contained" color="secondary" href="/newGames">
@@ -107,7 +107,10 @@ export default function Home (){
             </Button> 
             <Button  variant="contained" color="primary" href="/">
             Ir a Pagina de Lanzamiento
-            </Button>                     
+            </Button>    */}
+            <Link to= '/'><button className="selectfont">IR A PAGINA DE LANZAMIENTO</button></Link> 
+            <button className="selectfont" onClick={p => {handleClick(p)}}>VOLVER A CARGAR JUEGOS</button>
+            <Link to= '/newGames'><button className="selectfont">CREAR JUEGO NUEVO</button></Link>                    
         </div>            
             
             <br />

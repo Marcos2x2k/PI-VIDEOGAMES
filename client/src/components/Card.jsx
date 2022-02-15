@@ -16,9 +16,9 @@ export default function Card({name, image, genre, genres}){ // platform
         <div>   
             <h2 class="heading">{name}</h2>                        
             <img  className="card" src={image} alt="img not found" width = "400px" height="270px"/>
-            <h3 class="heading">GENEROS: {genres
+            <h5 class="headingRojo">GENEROS: {genres
                         ? genres.map((p) => p.name + ", ")
-                        : genre.map((p) => p.name + ", ")}</h3>
+                        : genre.map((p) => p.name + ", ")}</h5>
 
             {/* <h5 class="heading">Generos:  {genre.join(', ')}</h5> */}
             {/* .join(', ') */}

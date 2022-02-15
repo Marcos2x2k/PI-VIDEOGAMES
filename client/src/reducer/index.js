@@ -38,8 +38,8 @@ export default function rootReducer(state =  initialState, action){ //action.pay
                 if (p.genre) { //info viene como string
                     return p.genre.includes(action.payload)
                 }
-                return null
-            })
+                // return null
+            })            
             return {
                 ...state,
                 games: action.payload === 'sinFiltro' ? allStateGames : tempGames,
