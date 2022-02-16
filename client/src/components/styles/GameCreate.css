@@ -16,10 +16,14 @@
     padding: 10px;
     margin: 10px;
     color: white;
-    text-shadow: black 1px 3px;
-        
+    text-shadow: black 1px 3px;        
   }
-
+  .hijoRojo {
+    padding: 10px;
+    margin: 10px;
+    color: red;
+    text-shadow: black 1px 1px;        
+  }
   .selectfont{
     font-size:18px
   }

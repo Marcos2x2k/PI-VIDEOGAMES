@@ -20,12 +20,14 @@ export default function SearchBar(){
 
     return (
         <div>
-            <input
-            type = 'text'
-            placeholder = "Buscar Juego..."
-            onChange={(p) => handInputChange(p)}
-            />
-            <button type='submit' onClick={(p)=> handleSubmit(p)}>Buscar</button>
+            {/* //cuando apreto enter el form hace en submit */}
+            <form onSubmit={(p)=> handleSubmit(p)}> 
+                <input
+                type = 'text'
+                placeholder = "Buscar Juego..."
+                onChange={(p) => handInputChange(p)}                />
+                <button type='submit'>Buscar</button>
+            </form>
         </div>
     )
 

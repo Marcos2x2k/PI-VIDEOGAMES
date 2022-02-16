@@ -57,38 +57,25 @@ export default function Home (){
         dispatch(orderByName(p.target.value)) //despacho la accion
         setCurrentPage(1); //ordenamiento seteado en pagina 1
         setOrden(`Ordenado ${p.target.value}`)  //es un estado local vacio, lo uso para modif estado local y renderize
-    };
-    
-
+    }; 
     //Aca aplico lógica, esta funcion le paso en el select de Types 
     //En HOME -> ALL Generos/Plataformas ETC
     function handleFilterGamesByGenre(p){
         dispatch(filterGamesByGenre(p.target.value))
     };
-
     //filtramos los creados en la Bdatos
     function handleFilterCreated(p) {
         p.preventDefault();
         dispatch(filterCreated(p.target.value))
-    };
-
-    // paginado orden Asc y Desc
-    function handleSort(p){
-        p.preventDefault();
-        dispatch(orderByName(p.target.value)) //despacho la accion
-        setCurrentPage(1); //ordenamiento seteado en pagina 1
-        setOrden(`Ordenado ${p.target.value}`)  //es un estado local vacio, lo uso para modif estado local y renderize
-    };
-
+    };    
     // const handleClickPage = (page) => {
     //     dispatch(getGames({ page, name, order }));
     //     dispatch(setPage(page));
     // }
-
     // const totalPages = (pageNumber) => {
     //     setCurrentPage(pageNumber);
     // };
-
+    
 // RENDERIZADOS
 // Aca renderizamos un Div
     return(

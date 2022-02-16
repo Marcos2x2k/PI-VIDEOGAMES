@@ -1,8 +1,8 @@
 import axios from 'axios';
 export const SET_PAGE = 'SET_PAGE';
 
-
-//aca se realiza la coneccion de back con el front HAGO EN PROMISE MEJOR
+//aca se realiza la coneccion de back con el front 
+// ACA EN SYNC PERO ABAJO HAGO EN PROMISE MEJOR
 // export function getGames(){
 //     return function(dispatch){
 //         var json = await axios.get("http://localhost:3001/games",{});
@@ -10,10 +10,9 @@ export const SET_PAGE = 'SET_PAGE';
 //         type: 'GET_GAMES',
 //         payload: json.data   
 //     })}}; 
-// HAGO EN PROMISE MEJOR
 export function getGames(){  // esta Action permite renderizar todos los Games
     return function(dispatch){
-        axios.get('http://localhost:3001/games')
+        axios.get('http://localhost:3001/games',{})
         .then((json) => {
             dispatch({type: 'GET_GAMES', payload: json.data})
         })
@@ -46,10 +45,19 @@ export function getGenres(){
             payload: json.data});
     };
 }
-// PARA EL POST DE GENRES
+export function getListGenres(){ //(GameCreate) (HOME) Me trae los Generos
+    return function(dispatch){
+        axios.get('http://localhost:3001/genres')
+        .then((response)=>{
+            dispatch({type:'GET_GENRES', payload: response.data})
+        }) 
+        .catch(()=>{ alert('Error al traer Generos')})
+    }
+}
+// PARA EL POST DE GENRES y CREAR AL NUEVO JUEGO
 export function postGame(payload){ //recibe un objeto con toda la info del Game a crear (GameCreate)
     return async function (dispatch){
-        const response = await axios.post("http://localhost:3001/games", payload)
+        const response = await axios.post("http://localhost:3001/newGames", payload)
         //console.log (response);
         return response
     }
@@ -64,16 +72,6 @@ export function getDetailsGames(id){
         .catch(()=>{
             console.log('No se encuentra Id');
         })
-    }
-}
-
-export function getListGenres(){ //(GameCreate) (HOME) Me trae los Generos
-    return function(dispatch){
-        axios.get('http://localhost:3001/genres')
-        .then((response)=>{
-            dispatch({type:'GET_GENRES', payload: response.data})
-        }) 
-        .catch(()=>{ alert('Error al traer Generos')})
     }
 }
 
