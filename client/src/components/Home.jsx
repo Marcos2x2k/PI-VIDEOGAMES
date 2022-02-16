@@ -6,7 +6,7 @@ import './styles/Home.css'; // importo los styles de mi Home.css
 //IMPORTO PORQUE USAMOS HOOKS
 import {useState, useEffect, Fragment} from 'react'; //  HOOK USAMOS useState es un hook (//)Fragment es como un div para envolver hijos div en app)
 import {useDispatch, useSelector} from 'react-redux'; 
-import {getGames, getListGenres, filterGamesByGenre, filterCreated, orderByName, setPage} from '../actions';//Siempre importo las acciones nuevas 
+import {getGames, getListGenres, filterGamesByGenre, filterCreated, orderByName, getPlatforms, setPage} from '../actions';//Siempre importo las acciones nuevas 
 
 //LINK nos sirve para poder movernos por nuestra aplicación
 //más fácilmente en lugar de tener que cambiar la URL manualmente en el navegador.
@@ -34,6 +34,7 @@ export default function Home (){
     const currentGames =  allGames.slice(indexOfFirstGame, indexOfLastGame)
 
     const genres = useSelector((state) => state.genres); //estado global de Generos
+    const platforms = useSelector((state) => state.platforms); //estado global de Generos
 
     const paginado = (pageNumber) => {
         setCurrentPage(pageNumber)
@@ -42,7 +43,8 @@ export default function Home (){
     // ** TRAIGO DEL ESTADO LOS GENEROS CUANDO EL COMPONENTE SE MONTA
     useEffect (()=>{
         dispatch(getGames());
-        dispatch(getListGenres());         
+        dispatch(getListGenres()); 
+        dispatch(getPlatforms());        
         //getListGenres para usar con filtrados por Genero
     },[dispatch])
 
@@ -75,7 +77,7 @@ export default function Home (){
     // const totalPages = (pageNumber) => {
     //     setCurrentPage(pageNumber);
     // };
-    
+
 // RENDERIZADOS
 // Aca renderizamos un Div
     return(
@@ -113,13 +115,15 @@ export default function Home (){
             </select>            
                        
             <select className="selectfont" onChange={p => handleFilterCreated(p)}>                
+                <option value="" selected disabled hidden>Mostrar Juegos</option>
                 <option value="all">Todos Los Juegos</option>
+                <option value="api">De la API</option>
                 <option value="created">Creados</option>
                 {/* <option value="api">Api</option> */}
             </select>   
 
             <select className="selectfont" onChange={p => handleFilterGamesByGenre(p)}>
-                <option value="sinFiltro">Todos los Generos</option>               
+                <option value="sinFiltro" selected disabled hidden>Generos</option>               
                 {genres?.map((p) => {
                         return (
                             <option key={p.id} value={p.name}>
@@ -142,7 +146,7 @@ export default function Home (){
                 {currentGames?.map ((p) =>{  // CON ? PREGUNTA SI EXISTE Y DESPUES MAPEA
                     return(
                     <Fragment>                    
-                        <div className="carddirection">                           
+                        <div>                           
                             <Link 
                                 key={p.id}
                                 to={`/games/${p.id}`}                            
@@ -152,7 +156,8 @@ export default function Home (){
                                     image={p.image ? p.image : p.image}
                                     genre={p.genre}  
                                     genres={p.genres}                               
-                                    //platform={p.platforms.data.results.map(g=>g.name)}
+                                    platform={p.platform}
+                                    platforms={p.platforms}
                             />                        
                             </Link>
                     </div>

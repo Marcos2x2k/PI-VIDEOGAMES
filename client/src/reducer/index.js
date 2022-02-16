@@ -4,6 +4,7 @@ const initialState = {
     games : [],    
     allGames:[],
     genres:[],
+    platforms:[],
     gamesDetails: [],
     gamesDelete: [],
 }
@@ -29,6 +30,11 @@ export default function rootReducer(state =  initialState, action){ //action.pay
                 ...state,                
                 genres: action.payload
             }  
+        case 'GET_PLATFORMS':            
+            return{
+                ...state,                
+                platforms: action.payload
+            } 
         case 'FILTER_GAMES_BY_GENRES':
             const allStateGames = state.games
             const tempGames = allStateGames.filter(p => {
@@ -39,7 +45,7 @@ export default function rootReducer(state =  initialState, action){ //action.pay
                     return p.genre.includes(action.payload)
                 }
                 // return null
-            })            
+            })           
             return {
                 ...state,
                 games: action.payload === 'sinFiltro' ? allStateGames : tempGames,
@@ -60,7 +66,7 @@ export default function rootReducer(state =  initialState, action){ //action.pay
         case 'FILTER_CREATED':                
                 // uso ternario
                 const allGameApiDB = state.allGames
-                const createFilter = action.payload === 'created' ? allGameApiDB.filter(p => p.createInDb) : allGameApiDB.filter(p => !p.createInDb)
+                const createFilter = action.payload === 'created' ? allGameApiDB.filter(p => p.createInDb) : state.allGames.filter(p => !p.createInDb)
                 return{
                    ...state,
                    games: action.payload === 'all' ? allGameApiDB : createFilter

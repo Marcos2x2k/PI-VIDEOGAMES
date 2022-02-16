@@ -22,7 +22,7 @@ export function getGames(){  // esta Action permite renderizar todos los Games
     }
 }
 
-export function getNameGames(name){ // esta Action permite buscar todos los Games por nombres
+export function getNameGames(name){ // esta Action permite BUSQUEDA todos los Games por nombres
     return async function (dispatch){
     try{
         var json = await axios.get("http://localhost:3001/games?name=" + name);
@@ -42,6 +42,15 @@ export function getGenres(){
         // var info = await axios(`http://localhost:3001/types/${name}`); otra forma
         return dispatch({
             type: "GET_GENRES", 
+            payload: json.data});
+    };
+}
+export function getPlatforms(){
+    return async function (dispatch){
+        var json = await axios.get("http://localhost:3001/games", {});
+        // var info = await axios(`http://localhost:3001/types/${name}`); otra forma
+        return dispatch({
+            type: "GET_PLATFORMS", 
             payload: json.data});
     };
 }

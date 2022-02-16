@@ -36,10 +36,17 @@ export default function GameCreate (){
     function validate(input){
         let errors ={};
         if (!input.name) {
-            errors.name = 'Se requiere una Nombre de JUEGO';
+            errors.name = 'Requiere Nombre de JUEGO';
         }else if (!input.description) {
-            errors.description = 'se Requiere una Altura'
+            errors.description = 'Requiere Descripción'        
+        }else if (!input.platform) {
+        errors.platform = 'Requiere Plataforma'        
+        }else if (!input.rating) {
+        errors.rating = 'Requiere Rating'
         }
+        else if (!input.released) {
+            errors.released = 'Requiere Fecha Lanzamiento'
+            }
         return errors;
     };
 
@@ -143,65 +150,80 @@ export default function GameCreate (){
             <br/><br/><br/> 
         <form onSubmit={(p) => handleSubmit(p)} >
                 <div>
-                    <label className="hijo">Nombre Juego:</label>
-                    <input
-                    type="text"                    
-                    name="name"
-                    value= {input.name}
-                    onChange={(p)=>handleChange(p)}
-                    autoComplete="off"
-                    />
-                    {errors.name && (
-                        <h2 className='error'>{errors.name}</h2>
-                    )}                
-                <br/><br/>                 
-                    <label className="hijo">Descripción:</label>
-                    <input
-                    type="text"
-                    value= {input.description}
-                    name="description"
-                    onChange={(p)=>handleChange(p)}
-                    />
-                    {errors.name && (
-                        <h2 className='error'>{errors.description}</h2>
-                    )}                
-                <br/><br/>          
-                    <label className="hijo">Plataforma:</label>
-                    <input
-                    type="text"
-                    value= {input.platform}
-                    name="platform"
-                    onChange={(p)=>handleChange(p)}
-                    />
-                <br/><br/>                 
-                    <label className="hijo">Rating:</label>
-                    <input
-                    type="text"
-                    value= {input.rating}
-                    name="rating"
-                    onChange={(p)=>handleChange(p)}
-                    />   
-                <br/><br/>              
-                    <label className="hijo">Fecha Lanzamiento:</label>
-                    <input
-                    type="text"
-                    value= {input.released}
-                    name="released"
-                    onChange={(p)=>handleChange(p)}
-                    />                
+                    <div>
+                        <label className="hijo">Nombre Juego:</label>
+                        <input
+                        type="text"                    
+                        name="name"
+                        value= {input.name}
+                        onChange={(p)=>handleChange(p)}
+                        autoComplete="off"
+                        />
+                        {errors.name && (<p className='hijoAmarillo'>{errors.name}</p>
+                        )}   
+                    </div>             
+                <br/>
+                    <div>
+                        <label className="hijo">Descripción:</label>
+                        <input
+                        type="text"
+                        value= {input.description}
+                        name="description"
+                        onChange={(p)=>handleChange(p)}
+                        />
+                        {errors.description && (
+                            <h2 className='hijoAmarillo'>{errors.description}</h2>
+                        )}
+                    </div>                
+                <br/>
+                    <div>
+                        <label className="hijo">Plataforma:</label>
+                        <input
+                        type="text"
+                        value= {input.platform}
+                        name="platform"
+                        onChange={(p)=>handleChange(p)}
+                        />
+                        {errors.platform && (<p className='hijoAmarillo'>{errors.platform}</p>
+                        )}
+                    </div>
+                <br/>
+                    <div>
+                        <label className="hijo">Rating:</label>
+                        <input
+                        type="text"
+                        value= {input.rating}
+                        name="rating"
+                        onChange={(p)=>handleChange(p)}
+                        />
+                        {errors.rating && (<p className='hijoAmarillo'>{errors.rating}</p>
+                        )}
+                    </div>                 
+                <br/>
+                    <div>
+                        <label className="hijo">Fecha Lanzamiento:</label>
+                        <input
+                        type="text"
+                        value= {input.released}
+                        name="released"
+                        onChange={(p)=>handleChange(p)}
+                        />  
+                        {errors.released && (<p className='hijoAmarillo'>{errors.released}</p>
+                        )}
+                    </div>                   
                 <br/><br/>                
                     <label className="hijo">Imagen:</label>
                     <input
                     type="text"
                     value= {input.image}
                     name="image"
-                    onChange={handleChange}
+                    onChange={(p)=>handleChange(p)}
                     />                 
                     <br/> <br/>
                     <div>
                     <label className="hijo">Genero:</label>
                     <select onChange={(p)=>handleSelect(p)}>                    
-                    <option value="">--Seleccione Genero--</option>
+                    {/* <option value="">--Seleccione Genero--</option> */}
                         {genres?.map((gen) => {
                         return (
                             <option key={gen.id} value={gen.name}>

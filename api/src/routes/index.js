@@ -18,21 +18,21 @@ const {API_KEY} = process.env;
 const getApiInfo = async () => {
     try {
         // API:
-        let gamesPage1 = axios.get(`https://api.rawg.io/api/games?key=${API_KEY}&page=1`);
-        let gamesPage2 = axios.get(`https://api.rawg.io/api/games?key=${API_KEY}&page=2`);
-        let gamesPage3 = axios.get(`https://api.rawg.io/api/games?key=${API_KEY}&page=3`);
-        let gamesPage4 = axios.get(`https://api.rawg.io/api/games?key=${API_KEY}&page=4`);
-        let gamesPage5 = axios.get(`https://api.rawg.io/api/games?key=${API_KEY}&page=5`);
+        let Page1 = axios.get(`https://api.rawg.io/api/games?key=${API_KEY}&page=1`);
+        let Page2 = axios.get(`https://api.rawg.io/api/games?key=${API_KEY}&page=2`);
+        let Page3 = axios.get(`https://api.rawg.io/api/games?key=${API_KEY}&page=3`);
+        let Page4 = axios.get(`https://api.rawg.io/api/games?key=${API_KEY}&page=4`);
+        let Page5 = axios.get(`https://api.rawg.io/api/games?key=${API_KEY}&page=5`);
 
-        let promiseALL = await Promise.all([gamesPage1, gamesPage2, gamesPage3, gamesPage4, gamesPage5]);                                            
+        let pageALL = await Promise.all([Page1, Page2, Page3, Page4, Page5]);                                            
 
-        gamesPage1 = promiseALL[0].data.results;
-        gamesPage2 = promiseALL[1].data.results;
-        gamesPage3 = promiseALL[2].data.results;
-        gamesPage4 = promiseALL[3].data.results;
-        gamesPage5 = promiseALL[4].data.results;       
+        Page1 = pageALL[0].data.results;
+        Page2 = pageALL[1].data.results;
+        Page3 = pageALL[2].data.results;
+        Page4 = pageALL[3].data.results;
+        Page5 = pageALL[4].data.results;       
 
-        let apiHtml = gamesPage1.concat(gamesPage2).concat(gamesPage3).concat(gamesPage4).concat(gamesPage5);                  
+        let apiHtml = Page1.concat(Page2).concat(Page3).concat(Page4).concat(Page5);                  
             
         let ApiInfo = apiHtml.map(p => {
         return { // ya la retorno con campos iguales a mi DB

@@ -5,12 +5,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { getDetailsGames } from "../actions/index";
 import { Link } from "react-router-dom";
 
-
 import './styles/Card.css';
 
 function Details(){
     // trae del Reducer-index-> CASE (GET_DETAILS_DOG) gamesDetail
-    const allDetails = useSelector((state) => state.gamesDetails); 
+    const allDetails = useSelector((state) => state.gamesDetails);
+    //console.log(allDetails) 
     const dispatch = useDispatch();
     const { id } = useParams();
     useEffect(() => {
@@ -36,8 +36,17 @@ function Details(){
                         : "NO POSEE DESCRIPCION"}</h3>
                     <h3 class="heading">GENEROS: {allDetails[0].genres
                         ? allDetails[0].genres.map((p) => p.name + ", ")
-                        : allDetails[0].genre.map((p) => p.name + ", ")}</h3>
-                    {/* <h3 class="heading">PLATAFORMAS: {allDetails[0].platform}</h3>      */}
+                        : allDetails[0].genre.map((p) => p.name + ", ")}</h3> 
+
+                    <h3 class="heading">PLATAFORMAS: {Array.isArray(allDetails[0].platform)
+                        ? allDetails[0].platform.map((p) =>p.platform.name + ", LADRON ")
+                        : "Pc"}                       
+                                             {/* // "Action"} */}
+                        {/* allDetails[0].platform.map((p) => p.name + ", ROBO ")                  */}
+                    </h3>
+                    {/* <h3 class="heading">PLATAFORMAS: {allDetails[0].platforms
+                        ? allDetails[0].platform.map((p) => p + ", ")
+                        : allDetails[0].platforms.map((p) => p + ", ")}</h3>  */}
                     {/* <h3>{allDetails[0].genre
                     ? allDetails[0].genre
                     : allDetails[0].genres?.map((p) => p.name + " ")}

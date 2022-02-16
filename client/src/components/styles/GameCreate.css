@@ -24,6 +24,12 @@
     color: red;
     text-shadow: black 1px 1px;        
   }
+  .hijoAmarillo {
+    padding: 10px;
+    margin: 10px;
+    color: yellow;
+    text-shadow: black 1px 1px;        
+  }
   .selectfont{
     font-size:18px
   }

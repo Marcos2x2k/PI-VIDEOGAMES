@@ -10,6 +10,13 @@
     justify-content: auto;
     margin: auto; 
 }
+.carddirection{
+    display: grid;
+      grid-template-columns: auto auto auto auto auto;
+      justify-content:center;
+      width: 80%;
+      margin: auto auto;
+}
 
 .heading {
      color: #fbf8f8ed; 
