@@ -109,6 +109,13 @@ export function orderByName(payload){
     }
 }
 
+export function orderByRating(payload){
+    return{
+        type: 'ORDER_BY_RATING',
+        payload
+    }
+}
+
 export function setPage(page){
     return {
         type: SET_PAGE,

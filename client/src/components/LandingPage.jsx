@@ -23,7 +23,7 @@ export default function LandingPage(){
                 <button src='/Home'>INGRESAR</button>
                 {/* <Link to='/games'><button>Home</button></Link> */}
                 {/* <Button variant="contained" color="primary">INGRESAR</Button> */}
-                <br /><br /><br />
+                <br/><br/><br/>
             </Link>
 
         </div>

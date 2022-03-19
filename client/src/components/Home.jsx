@@ -6,7 +6,7 @@ import './styles/Home.css'; // importo los styles de mi Home.css
 //IMPORTO PORQUE USAMOS HOOKS
 import {useState, useEffect, Fragment} from 'react'; //  HOOK USAMOS useState es un hook (//)Fragment es como un div para envolver hijos div en app)
 import {useDispatch, useSelector} from 'react-redux'; 
-import {getGames, getListGenres, filterGamesByGenre, filterCreated, orderByName, getPlatforms, setPage} from '../actions';//Siempre importo las acciones nuevas 
+import {getGames, getListGenres, filterGamesByGenre, filterCreated, orderByName, getPlatforms, orderByRating, setPage} from '../actions';//Siempre importo las acciones nuevas 
 
 //LINK nos sirve para poder movernos por nuestra aplicación
 //más fácilmente en lugar de tener que cambiar la URL manualmente en el navegador.
@@ -34,7 +34,8 @@ export default function Home (){
     const currentGames =  allGames.slice(indexOfFirstGame, indexOfLastGame)
 
     const genres = useSelector((state) => state.genres); //estado global de Generos
-    const platforms = useSelector((state) => state.platforms); //estado global de Generos
+    const platforms = useSelector((state) => state.platforms); //estado global de Plataformas
+    const ratings = useSelector((state) => state.ratings);
 
     const paginado = (pageNumber) => {
         setCurrentPage(pageNumber)
@@ -57,6 +58,12 @@ export default function Home (){
     function handleSort(p){
         p.preventDefault();
         dispatch(orderByName(p.target.value)) //despacho la accion
+        setCurrentPage(1); //ordenamiento seteado en pagina 1
+        setOrden(`Ordenado ${p.target.value}`)  //es un estado local vacio, lo uso para modif estado local y renderize
+    }; 
+    function handleSortRating(p){
+        p.preventDefault();
+        dispatch(orderByRating(p.target.value)) //despacho la accion
         setCurrentPage(1); //ordenamiento seteado en pagina 1
         setOrden(`Ordenado ${p.target.value}`)  //es un estado local vacio, lo uso para modif estado local y renderize
     }; 
@@ -98,6 +105,7 @@ export default function Home (){
             Ir a Pagina de Lanzamiento
             </Button>    */}
             <Link to= '/'><button className="selectfont">IR A PAGINA DE LANZAMIENTO</button></Link> 
+            {/* <Link to= '/home'><button className="selectfont">VOLVER A CARGAR JUEGOS</button></Link>  */}
             <button className="selectfont" onClick={p => {handleClick(p)}}>VOLVER A CARGAR JUEGOS</button>
             <Link to= '/newGames'><button className="selectfont">CREAR JUEGO NUEVO</button></Link>                    
         </div>            
@@ -119,6 +127,12 @@ export default function Home (){
                 <option value="all">Todos Los Juegos</option>
                 <option value="api">De la API</option>
                 <option value="created">Creados</option>
+                {/* <option value="api">Api</option> */}
+            </select>   
+            <select className="selectfont" onChange={p => handleSortRating(p)}>                
+                <option value="" selected disabled hidden>Rating</option>                
+                <option value="rasd">Ascendente</option>
+                <option value="rdes">descendente</option>
                 {/* <option value="api">Api</option> */}
             </select>   
 
@@ -160,9 +174,15 @@ export default function Home (){
                                     platforms={p.platforms}
                             />                        
                             </Link>
+                            {/* : (
+                    <div>
+                        <h1>CARGANDO...</h1>                  
+                    </div> */}
+              )
                     </div>
+                    
                     </Fragment> 
-                    );
+                );
                 })}
             </div> 
     </div>        

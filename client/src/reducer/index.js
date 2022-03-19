@@ -101,6 +101,31 @@ export default function rootReducer(state =  initialState, action){ //action.pay
                    ...state,
                    games: sortedArr // paso al estado el ordenamiento
             }
+            case 'ORDER_BY_RATING':
+                let RsortedArr = action.payload === 'rasd' ?
+                state.games.sort(function(a,b){
+                    if (a.rating > b.rating) {
+                        return 1;
+                    }
+                    if (a.rating < b.rating) {
+                        return -1;
+                    }
+                    return 0;
+                }) :
+                state.games.sort(function(a,b){
+                    if (a.rating > b.rating) {
+                        return -1;
+                    }
+                    if (a.rating < b.rating) {
+                        return 1;
+                    }
+                    return 0;
+                })        
+                
+                return{
+                   ...state,
+                   games: RsortedArr // paso al estado el ordenamiento
+            }
         default:
                 return state;
         }
